@@ -2,13 +2,27 @@
 
 Mgrid generates for you a optimal and handy grid.
 
-##Usage
+## Instalation
+
+The recommended way to install Mgrid is [through
+composer](http://getcomposer.org). Just create a `composer.json` file and
+run the `php composer.phar install` command to install it:
+
+    {
+        "require": {
+            "mdn/mgrid": "dev-master"
+        }
+    }
+
+Alternatively, you can download the [`mgrid.zip`][2] file and extract it.
+
+## Usage
 
 
-##Core Concepts
+## Core Concepts
 
 
-##Docs
+## Docs
 
 **See the `doc` directory for more detailed documentation or go to http://mgrid.mdnsolutions.com.
 
