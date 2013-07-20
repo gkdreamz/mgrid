@@ -14,7 +14,7 @@ run the `php composer.phar install` command to install it:
         }
     }
 
-Alternatively, you can download the [`mgrid.zip`][2] file and extract it.
+Alternatively, you can download the [`mgrid.zip`][1] file and extract it.
 
 ## Usage
 
@@ -52,3 +52,4 @@ See also the list of [contributors](https://github.com/medinadato/mgrid/contribu
 Mgrid is licensed under the MIT License - see the `LICENSE` file for details
 
 
+[1]: http://mgrid.mdnsolutions.com/download
