@@ -1,4 +1,4 @@
-# Mgrid - Grid solution for PHP 5.0+ [![Build Status]](http://mgrid.mdnsolutions.com)
+# Mgrid - Grid solution for PHP 5
 
 Mgrid generates for you a optimal and handy grid.
 
