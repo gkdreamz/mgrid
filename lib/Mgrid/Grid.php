@@ -2,6 +2,15 @@
 
 namespace Mgrid;
 
+/**
+ * Mgrid
+ *
+ *
+ * @category   Mgrid
+ * @package    Mgrid
+ * @copyright  Copyright (c) 2003-2013 MDN Solutions. (http://www.mdnsolutions.com)
+ * @license    http://mgrid.mdnsolutions.com/license
+ */
 use Mgrid\Export;
 
 /**
@@ -11,7 +20,6 @@ use Mgrid\Export;
  */
 class Grid
 {
-
     /**
      * @var string html id used by grid
      */
@@ -97,7 +105,7 @@ class Grid
     protected $page;
 
     /**
-     * @var Zend_Controller_Request_Abstract The http request
+     * @var $_REQUEST The http request
      */
     protected $request;
 
@@ -119,7 +127,7 @@ class Grid
     protected $filters = array();
 
     /**
-     * @var \Zend_Session
+     * @var \Session
      */
     protected $session;
 
@@ -147,7 +155,7 @@ class Grid
         if (isset($options))
             $this->setOptions($options);
 
-        $this->setRequest(\Zend_Controller_Front::getInstance()->getRequest());
+        $this->setRequest($_REQUEST);
 
         $this->init();
     }
@@ -735,32 +743,42 @@ class Grid
      */
     public function render($name = NULL)
     {
-        if ($this->builded === false)
+        if ($this->builded === false) {
             $this->build();
+        }
 
-        $view = new \Zend_View;
-        $view->setBasePath( __DIR__ . '/' . $this->getTemplatePath());
-        $view->setScriptPath( __DIR__ . '/' . $this->getTemplatePath());
-        $view->grid = $this;
-        
-        return $view->render('grid.phtml');
+//        $view = new \Zend_View;
+//        $view->setBasePath( __DIR__ . '/' . $this->getTemplatePath());
+//        $view->setScriptPath( __DIR__ . '/' . $this->getTemplatePath());
+//        $view->grid = $this;
+//        
+//        return $view->render('grid.phtml');
+        include __DIR__ . '/templates/grid.phtml';
     }
 
     /**
      * The user request
      * @return Zend_Controller_Request_Abstract
      */
-    public function getRequest()
+    public function getRequest($key = false)
     {
+        if($key) {
+            if(!isset($this->request[$key])) {
+                return false;
+            }
+            
+            return $this->request[$key];
+        }
+        
         return $this->request;
     }
 
     /**
      * Sets the request object
-     * @param \Zend_Controller_Request_Abstract $request
+     * @param $_REQUEST $request
      * @return Grid 
      */
-    public function setRequest(\Zend_Controller_Request_Abstract $request)
+    public function setRequest($request)
     {
         $this->request = $request;
         return $this;
@@ -815,7 +833,7 @@ class Grid
         // if page don't exists
         if (null == $this->getPage()) {
             //gets the page by request
-            $page = $this->getRequest()->getParam('page');
+            $page = $this->getRequest('page');
             $this->setPage($page);
         }
 
@@ -876,7 +894,7 @@ class Grid
         //colunas
         $columns = $this->getColumns();
         //parametros
-        $params = $this->getRequest()->getParams();
+        $params = $this->getRequest();
 
         //checo se tenho ordenacao
         if (!$this->getHasOrdering()) {
@@ -898,12 +916,12 @@ class Grid
         // remover ordernacao
         if (isset($params['grid']['removeOrder'])) {
             //removo a sessao
-            unset($this->session->ordering);
+            unset($this->session['ordering']);
         }
 
         //checo coluna selecionada via session ou parametros
-        $colOrderSes = $this->session->ordering['colOrder'];
-        $dirOrderSes = $this->session->ordering['dirOrder'];
+        $colOrderSes = $this->session['ordering']['colOrder'];
+        $dirOrderSes = $this->session['ordering']['dirOrder'];
         $colOrder = ($colOrderSes) ? $colOrderSes : false;
         $dirOrder = ($dirOrderSes) ? $dirOrderSes : false;
         $colOrder = (isset($params['grid']['colOrder'])) ? $params['grid']['colOrder'] : $colOrder;
@@ -944,8 +962,8 @@ class Grid
             //ordeno
             $result = $this->orderBy($result, $this->getOrderCol(), $this->getOrderDirection());
             //gravo na sessao
-            $this->session->ordering['colOrder'] = $this->getOrderCol();
-            $this->session->ordering['dirOrder'] = $this->getOrderDirection();
+            $this->session['ordering']['colOrder'] = $this->getOrderCol();
+            $this->session['ordering']['dirOrder'] = $this->getOrderDirection();
         }
         //result ordenado
         $this->result = $result;
@@ -982,22 +1000,22 @@ class Grid
         $this->processColumnFilters();
 
         // pego parametros enviados
-        $params = $this->getRequest()->getParams();
+        $params = $this->getRequest();
 
         // remover filtros
         if (isset($params['grid']['removeFilter'])) {
             //removo a sessao
-            unset($this->session->filters);
+            unset($this->session['filters']);
             return $this;
         }
 
         //adicionar filtros validos, limpo sessao
         if (isset($params['grid']['addFilter']))
-            unset($this->session->filters);
+            unset($this->session['filters']);
 
         //caso tenha filtros na sessao
-        if (is_array($this->session->filters))
-            $params['grid'] = $this->session->filters;
+        if (is_array($this->session['filters']))
+            $params['grid'] = $this->session['filters'];
 
         // caso nao haja nada da grid ignoro
         if (!isset($params['grid']['filter']))
@@ -1014,7 +1032,7 @@ class Grid
         }
 
         // add filtros a sessao
-        $this->session->filters = $params['grid'];
+        $this->session['filters'] = $params['grid'];
 
         //filtro resultados
         $this->result = $this->processResultFilters($this->result);
@@ -1243,7 +1261,7 @@ class Grid
             throw new \Exception('No columns to show');
 
         //set up session of the grid
-        $this->session = new \Zend_Session_Namespace('grid');
+        $this->startSession();
 
         // generate the grid
         $this->processSource()
@@ -1251,20 +1269,21 @@ class Grid
                 ->processOrder();
 
         // pego parametros enviados
-        $params = $this->getRequest()->getParams();
-        $view = $this->getView();
+        $params = $this->getRequest();
+//        $view = $this->getView();
+        $title = ''; // was before $view->title
 
         // executes export
         if (isset($params['grid']['export']) && ($params['grid']['export'] != '')) {
             switch ($params['grid']['export']) {
                 case 'pdf':
-                    Export\Pdf::render($this, 'Relatório ' . $view->title);
+                    Export\Pdf::render($this, 'Relatório ' . $title);
                     break;
                 case 'csv':
-                    Export\Csv::render($this, $view->title);
+                    Export\Csv::render($this, $title);
                     break;
                 case 'xml':
-                    Export\Xml::render($this, $view->title);
+                    Export\Xml::render($this, $title);
                     break;
                 default:
                     throw new \Exception('The option to export is not a valid one.');
@@ -1280,6 +1299,20 @@ class Grid
                 ->processPager();
 
         return $this;
+    }
+    
+    /**
+     * Starts the session handle
+     */
+    private function startSession()
+    {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
+        
+        $_SESSION['mdn_mgrid'] = NULL;
+        
+        $this->session = $_SESSION['mdn_mgrid'];   
     }
 
     public function getPkIndex()

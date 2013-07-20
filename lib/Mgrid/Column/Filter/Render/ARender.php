@@ -33,11 +33,6 @@ abstract class ARender
      * @var array  match: fulltext, = | range: <>, >, <, >=, <= 
      */
     protected $condition = array('match' => array('='), 'range' => array('from' => '>=', 'to' => '<='));
-    /**
-     *
-     * @var \Zend_View
-     */
-    protected $view;
 
     /**
      * constructor may set options
@@ -45,10 +40,6 @@ abstract class ARender
      */
     public function __construct(array $options = array())
     {
-	//get view
-	$viewRenderer = \Zend_Controller_Action_HelperBroker::getExistingHelper('ViewRenderer');
-	$this->view = $viewRenderer->view;
-	
         $this->setOptions($options);
 	return $this;
     }

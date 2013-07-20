@@ -24,7 +24,7 @@ Alternatively, you can download the [`mgrid.zip`][1] file and extract it.
 
 ## Docs
 
-**See the `doc` directory for more detailed documentation or go to http://mgrid.mdnsolutions.com.
+See the `doc` directory for more detailed documentation or go to http://mgrid.mdnsolutions.com/documentation.
 
 
 

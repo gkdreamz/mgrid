@@ -65,7 +65,7 @@ class Action
      */
     public function __construct(array $options = array())
     {
-	\Zend\Stdlib\Configurator::configure($this, $options);
+	\Mgrid\Stdlib\Configurator::configure($this, $options);
 	return $this;
     }
 
