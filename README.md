@@ -20,7 +20,7 @@ Alternatively, you can download the [`mgrid.zip`][1] file and extract it.
 
 At the moment this grid is only available to go with Zend Framework 1.x. 
 We are working to try to make it as universal as possible. 
-Keen to help? Join the github project.
+Keen to help? Join the [`github project`][2].
 
 
 ## Core Concepts
@@ -57,3 +57,4 @@ Mgrid is licensed under the MIT License - see the `LICENSE` file for details
 
 
 [1]: http://mgrid.mdnsolutions.com/download
+[2]: https://github.com/medinadato/mgrid/
