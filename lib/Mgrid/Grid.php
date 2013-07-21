@@ -39,6 +39,10 @@ class Grid
      * @var bool if the grid will filter results
      */
     protected $showFilter = true;
+    /**
+     *
+     * @var type 
+     */
     protected $hasFilter = false;
 
     /**
@@ -70,12 +74,20 @@ class Grid
      * @var array actions used by grid
      */
     protected $actions = array();
+    /**
+     *
+     * @var type 
+     */
     protected $showActions = true;
 
     /**
      * @var array Mass Actions used by grid
      */
     protected $massActions;
+    /**
+     *
+     * @var type 
+     */
     protected $hasMassActions = false;
 
     /**
@@ -92,6 +104,10 @@ class Grid
      * @var Pager pager used by grid
      */
     protected $pager;
+    /**
+     *
+     * @var type 
+     */
     protected $hasPager = false;
 
     /**
@@ -753,7 +769,6 @@ class Grid
         $view->grid = $this;
         
         return $view->render('grid.phtml');
-//        include __DIR__ . '/templates/grid.phtml';
     }
 
     /**
@@ -918,12 +933,16 @@ class Grid
             //removo a sessao
             unset($this->session['ordering']);
         }
+        // order
+        $colOrder = false;
+        $dirOrder = false;
+        
+        // checo coluna selecionada via session ou parametros
+        if(isset($this->session['ordering'])) {
+            $colOrder = $this->session['ordering']['colOrder'];
+            $dirOrder = $this->session['ordering']['dirOrder'];
+        }
 
-        //checo coluna selecionada via session ou parametros
-        $colOrderSes = $this->session['ordering']['colOrder'];
-        $dirOrderSes = $this->session['ordering']['dirOrder'];
-        $colOrder = ($colOrderSes) ? $colOrderSes : false;
-        $dirOrder = ($dirOrderSes) ? $dirOrderSes : false;
         $colOrder = (isset($params['grid']['colOrder'])) ? $params['grid']['colOrder'] : $colOrder;
         $dirOrder = (isset($params['grid']['dirOrder'])) ? $params['grid']['dirOrder'] : $dirOrder;
 
