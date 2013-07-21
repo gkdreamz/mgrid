@@ -1,6 +1,6 @@
 <?php
 
-$grid = $this;
+$grid = $this->grid;
 $pager = $grid->getPager();
 
 // grid's attributes
@@ -89,7 +89,7 @@ $attribs = $grid->getAttribs();
         <div class="gControl">
             <?php
             if ($grid->getShowPager()) :
-                echo $this->render('grid/pager.phtml');
+                echo $this->render('pager.phtml');
             endif;
             ?>
             <?php if ($grid->getShowFilter()) : ?>
@@ -221,7 +221,7 @@ $attribs = $grid->getAttribs();
         </table>
         <?php
         if ($grid->getShowPager()) :
-            echo $this->render('grid/pager.phtml');
+            echo $this->render('pager.phtml');
         endif;
         ?>
     </div>

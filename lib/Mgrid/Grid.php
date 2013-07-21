@@ -747,13 +747,13 @@ class Grid
             $this->build();
         }
 
-//        $view = new \Zend_View;
-//        $view->setBasePath( __DIR__ . '/' . $this->getTemplatePath());
-//        $view->setScriptPath( __DIR__ . '/' . $this->getTemplatePath());
-//        $view->grid = $this;
-//        
-//        return $view->render('grid.phtml');
-        include __DIR__ . '/templates/grid.phtml';
+        $view = new \Zend_View;
+        $view->setBasePath( __DIR__ . '/' . $this->getTemplatePath());
+        $view->setScriptPath( __DIR__ . '/' . $this->getTemplatePath());
+        $view->grid = $this;
+        
+        return $view->render('grid.phtml');
+//        include __DIR__ . '/templates/grid.phtml';
     }
 
     /**
