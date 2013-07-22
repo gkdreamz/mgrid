@@ -45,7 +45,7 @@ See the `doc` directory for more detailed documentation or go to http://mgrid.md
 
 ##Requirements
 
-- Any flavor of PHP 5.0 or above should do
+- Any flavor of PHP 5.3 or above should do
 - [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
 
 ##Submitting bugs and feature requests
