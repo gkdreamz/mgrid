@@ -160,6 +160,7 @@ class Grid
 
     /**
      * Constructor of the class
+     * 
      * @param Mgrid\Source\ISource $source
      * @param array $options 
      */
@@ -173,14 +174,9 @@ class Grid
 
         $this->setRequest($_REQUEST);
 
+        // load the initial configuration
         $this->init();
     }
-
-    /**
-     * 
-     */
-    public function init()
-    {  }
 
     /**
      * Set grid state from options array
