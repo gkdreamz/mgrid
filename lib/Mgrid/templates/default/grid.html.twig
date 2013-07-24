@@ -1,0 +1,91 @@
+<!-- Stylesheets -->
+<style type="text/css">
+        <!--
+    {% include '/assets/css/mgrid.css' %}
+        -->
+    </style>
+
+    <form id="mgrid-form" action="?" method="get">
+
+        <div id="{{id}}" class="mgrid">
+
+            <div class="mgrid-control">
+                <div class="mgrid-pager mgrid-control-opt">
+                    <span>Total of 1 register(s) found.</span>
+                </div>
+                    
+                <div class="mgrid-filter mgrid-control-opt">
+                    <button id="mgrid-remove-filter" type="button"><span>Remove Filters</span></button>
+                    <button id="mgrid-add-filter" type="button">Apply Filters</button>
+                </div>
+                    
+                <div class="mgrid-order mgrid-control-opt">
+                    <button id="mgrid-remove-ordering" type="button"><span>Remove Ordering</span></button>
+                </div>
+
+                <div class="mgrid-export mgrid-control-opt">
+                    <select name="mgrid[export]">
+                        <option value="" selected="selected">Format</option>
+                        <option value="csv">CSV (Excel)</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+                    <button id="mgrid-export" type="button"><span>Export</span></button>
+                </div>
+            </div>
+
+            <table class="mgrid-table">
+                <tbody>
+                    <tr class="mgrid-table-title">
+
+                        <td colspan="1"></td>
+
+                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=companyName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Company</span></a></td>
+                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=roleName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Role</span></a></td>
+                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=personName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Name</span></a></td>
+                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=username&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Username</span></a></td>
+                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=birthday&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Birthday</span></a></td>
+
+                    </tr>
+
+                <input type="hidden" name="mgrid[addFilter]" value="1">
+                <tr class="gTFilter">
+                    <td colspan="1"></td>
+                    <td></td>	
+                    <td></td>	
+                    <td>
+                        <input type="text" name="mgrid[filter][personName]" id="mgrid-filter-personName" value="" class="fieldMgrid" size="">
+                    </td>	
+                    <td></td>
+                    <td></td>	
+                </tr>
+
+                <tr class="gTResultSet ">
+                    <td class="gTdOpcRow">
+                        <div class="gOpcRow">
+                            <ul>
+                                <li><img src="/img/admin/icon_opc.gif" alt="Options">
+                                    <ul>
+                                        <li><a href="/admin/access_user/edit/id/4" class="" title="Edit" target="_parent">Edit</a></li>
+                                        <li><a href="/admin/access_user/delete/id/4" class="del" title="Delete" target="_parent">Delete</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+
+                    <td>My Cell Company</td>
+                    <td>Administrator</td>
+                    <td>Demostration</td>
+                    <td>demo@mdnsolutions.com</td>
+                    <td></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <div class="mgrid-pager">
+                <span>Total of 1 register(s) found.</span>
+            </div>
+        </div>
+    </form>
+
+    <!-- Javascript -->

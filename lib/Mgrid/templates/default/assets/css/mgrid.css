@@ -1,0 +1,207 @@
+@CHARSET "UTF-8";
+/*
+    Document   : mgrid.css
+    Created on : Apr 13, 2011, 11:15:27 AM
+    Author     : Renato Medina <medinadato@gmail.com>
+    Description: Mgrid structure
+*/
+
+#mgrid-form {
+    width: 100%;
+}
+
+.mgrid-control {
+    display: table;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.mgrid-control-opt {
+    margin-right: 10px;
+}
+
+.mgrid-pager {
+    float:left;
+    width: auto;
+}
+.mgrid-pager img {
+    vertical-align: middle;
+}
+.mgrid-pager form {
+    display: inline; 
+    width: none;
+}
+.mgrid-export {
+    float: right;
+}
+.mgrid-export select {
+    width: 90px;
+    vertical-align: top;
+}
+
+div.mgrid-order {
+    float: right;
+    text-align: right;
+}
+
+.btnRemOrder {
+    margin-right: 5px;
+}
+
+div.mgrid-filter {
+    float: right;
+    text-align: right;
+}
+
+/* Mgrid - Table */
+.mgrid-table {
+    width: 100%;
+    margin-bottom: 5px;
+}
+.mgrid-table tr.gRowColor td {
+    background: #c9deea;
+}
+.mgrid-table td {
+    border-left: 1px solid #EDFFF9;
+    border-right: 1px solid #EDFFF9;
+    border-bottom: 1px solid #EDFFF9;
+    padding: 0 2px;
+}
+.mgrid-table-title {
+    height: 25px;
+}
+.mgrid-table-title td {
+    background: repeat-x center center url(img/sort_row_bg.gif);
+}
+.mgrid-table-title td a {
+    color: #333;
+    font-weight: bold;
+}
+.mgrid-table-title td a span {
+    display: block;
+    line-height: 20px;
+    margin: 0 5px;
+}
+.mgrid-table-title a.sort {
+    display: block;
+    background: repeat-x top left url(img/sort_off_bg.png);
+}
+.mgrid-table-title a.sort span {
+    background: no-repeat right center url(img/grid_sort_both.png);
+}
+.mgrid-table-title a.sortArrowAsc, .mgrid-table-title a.sortArrowDesc {
+    background: repeat-x top left url(img/sort_on_bg.gif);
+}
+.mgrid-table-title a.sortArrowAsc span {
+    background: no-repeat right center url(img/grid_sort_asc.png);
+}
+.mgrid-table-title a.sortArrowDesc span {
+    background: no-repeat right center url(img/grid_sort_desc.png);
+}
+.gTFilter {
+    background: #D6E8F5;
+    height: 30px;
+}
+.gTResultSet input[type=checkbox] {
+    border: 0;
+}
+.gTResultSet .gRowCheck {
+    text-align: center;
+    width: 22px;
+}
+
+/* mgrid table rows' options */
+.gTdOpcRow {
+    width: 22px;
+}
+
+.gOpcRow {
+    position: relative;
+}
+.gOpcRow ul {
+    list-style: none;
+}
+.gOpcRow ul li ul {
+    display: none;
+}
+.gOpcRow ul li:hover ul {
+    display: block;
+}
+.gOpcRow ul li ul {
+    position: absolute;
+    top:0;
+    left:17px;
+    border: 1px double #DEDEDE;
+}
+.gOpcRow ul li ul li {
+    background: #F3F3F3;
+    border: 1px dotted #FFF;
+    line-height: 18px;
+}
+.gOpcRow ul li ul li:hover {
+    background: #D6E8F5;
+}
+.gOpcRow ul li a {
+    width: 210px;
+    display: inline-block;
+    text-indent: 25px;
+    line-height: 22px;
+    background: 4px no-repeat url(../../../img/icons/application_edit.png);
+    color: #333;
+}
+.gOpcRow ul li a.accept {
+    background-image: url(../../../img/icons/accept.png);
+}
+.gOpcRow ul li a.view {
+    background-image: url(../../../img/icons/zoom.png);
+}
+.gOpcRow ul li a.del {
+    background-image: url(../../../img/icons/delete.png);
+}
+.gOpcRow ul li a.inactive {
+    background-image: url(../../../img/icons/exclamation.png);
+}
+.gOpcRow ul li a.ajax {
+    background-image: url(../../../img/icons/application_double.png);
+}
+.gOpcRow ul li a.pdf {
+    background-image: url(../../../img/icons/page_white_acrobat.png);
+}
+.fieldMgrid {
+
+}
+
+/* Mass Action */
+
+.gMassAction {
+    display: table;
+    width: 100%;
+    margin-bottom: 5px;
+    background: repeat-x top left url(img/massaction_bg.gif) #c8c8c8;
+    border: 1px solid #CCC;
+    line-height: 24px;
+}
+.gSelect {
+    float: left;
+    margin-left: 10px;
+}
+.gSelect a {
+    color: #ED6502;
+}
+.gAction {
+    float: right;
+    margin-right: 10px;
+}
+.gAction select {
+    width: 100px;
+}
+
+label#checkAllMgridLbl {
+    line-height: 20px;
+}
+input#checkAllMgrid {
+    margin:0;
+}
+span.massDelimiter {
+    margin:0 15px;
+}

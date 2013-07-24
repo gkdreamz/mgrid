@@ -22,33 +22,14 @@ namespace Mgrid;
 /**
  * Abstract class to generate the grid components
  *
- * @since       0.0.1
+ * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
-abstract class Grid
+interface GridInterface
 {
     /**
-     * @var Twig_Environment
+     * Build the grid and its configurations
      */
-    private $twig;
-    
-    /**
-     * 
-     */
-    public function __construct()
-    {
-        $loader = new \Twig_Loader_Filesystem( __DIR__ . '/templates/default/' );
-        
-        // load twig
-        $this->twig = new \Twig_Environment($loader);
-    }
-    
-    /**
-     * Returns the HTML output
-     */
-    public function render()
-    {
-        return $this->twig->render('grid.html.twig', array('id' => 'demo-test-id'));
-    }
+     function init();
 }
 
