@@ -58,6 +58,10 @@ div.mgrid-filter {
     width: 100%;
     margin-bottom: 5px;
 }
+.mgrid-table ul {
+    list-style: none;
+    padding: 0;
+}
 .mgrid-table tr.gRowColor td {
     background: #c9deea;
 }
@@ -98,77 +102,81 @@ div.mgrid-filter {
 .mgrid-table-title a.sortArrowDesc span {
     background: no-repeat right center url(img/grid_sort_desc.png);
 }
-.gTFilter {
+.mgrid-table-tr-filter {
     background: #D6E8F5;
     height: 30px;
 }
-.gTResultSet input[type=checkbox] {
+.mgrid-table-tr-rs input[type=checkbox] {
     border: 0;
 }
-.gTResultSet .gRowCheck {
+.mgrid-table-tr-rs .gRowCheck {
     text-align: center;
     width: 22px;
 }
 
-/* mgrid table rows' options */
-.gTdOpcRow {
+/* Mgrid table rows' options */
+.mgrid-table-tr-opc-row {
     width: 22px;
 }
 
-.gOpcRow {
+.mgrid-table-div-opc-row {
     position: relative;
 }
-.gOpcRow ul {
-    list-style: none;
+.mgrid-table-div-opc-row span.mgrid-table-div-opc-img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    background: url('assets/img/icons.png') -308px -163px no-repeat;
 }
-.gOpcRow ul li ul {
+
+.mgrid-table-div-opc-row ul.mgrid-table-div-opc-row-ul-list {
+    padding: 0 0 0 30px;
+}
+
+.mgrid-table-div-opc-row ul li ul {
     display: none;
 }
-.gOpcRow ul li:hover ul {
+.mgrid-table-div-opc-row ul li:hover ul {
     display: block;
 }
-.gOpcRow ul li ul {
+.mgrid-table-div-opc-row ul li ul {
     position: absolute;
     top:0;
-    left:17px;
-    border: 1px double #DEDEDE;
 }
-.gOpcRow ul li ul li {
+.mgrid-table-div-opc-row ul li ul li {
     background: #F3F3F3;
     border: 1px dotted #FFF;
     line-height: 18px;
 }
-.gOpcRow ul li ul li:hover {
+.mgrid-table-div-opc-row ul li ul li:hover {
     background: #D6E8F5;
 }
-.gOpcRow ul li a {
-    width: 210px;
+.mgrid-table-div-opc-row ul li a {
+    min-width: 210px;
     display: inline-block;
-    text-indent: 25px;
-    line-height: 22px;
-    background: 4px no-repeat url(../../../img/icons/application_edit.png);
     color: #333;
+    line-height: 26px;
 }
-.gOpcRow ul li a.accept {
-    background-image: url(../../../img/icons/accept.png);
-}
-.gOpcRow ul li a.view {
-    background-image: url(../../../img/icons/zoom.png);
-}
-.gOpcRow ul li a.del {
-    background-image: url(../../../img/icons/delete.png);
-}
-.gOpcRow ul li a.inactive {
-    background-image: url(../../../img/icons/exclamation.png);
-}
-.gOpcRow ul li a.ajax {
-    background-image: url(../../../img/icons/application_double.png);
-}
-.gOpcRow ul li a.pdf {
-    background-image: url(../../../img/icons/page_white_acrobat.png);
-}
-.fieldMgrid {
 
+.mgrid-table-div-opc-row a span.mgrid-table-div-opc-link-img {
+    float: left;
+    display: block;
+    width: 26px;
+    height: 26px;
+    background: url('assets/img/icons.png') -368px -163px;
+    margin-right: 5px;
+}
+.mgrid-table-div-opc-row a.accept span.mgrid-table-div-opc-link-img {
+    background-position: -368px -223px;
+}
+.mgrid-table-div-opc-row a.view  span.mgrid-table-div-opc-link-img {
+    background-position: -8px -193px;
+}
+.mgrid-table-div-opc-row a.del span.mgrid-table-div-opc-link-img {
+    background-position: -98px -163px;
+}
+.mgrid-table-div-opc-row a.pdf span.mgrid-table-div-opc-link-img {
+    background-position: -338px -133px;
 }
 
 /* Mass Action */
