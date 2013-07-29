@@ -10,19 +10,27 @@
         <div id="{{id}}" class="mgrid">
 
             <div class="mgrid-control">
+
+                {% if grid.hasPager == true %}
                 <div class="mgrid-pager mgrid-control-opt">
                     <span>Total of 1 register(s) found.</span>
                 </div>
-                    
+                {% endif %}
+
+                {% if grid.hasFilter == true %}
                 <div class="mgrid-filter mgrid-control-opt">
                     <button id="mgrid-remove-filter" type="button"><span>Remove Filters</span></button>
                     <button id="mgrid-add-filter" type="button">Apply Filters</button>
                 </div>
-                    
+                {% endif %}
+
+                {% if grid.hasOrdering == true %}
                 <div class="mgrid-order mgrid-control-opt">
                     <button id="mgrid-remove-ordering" type="button"><span>Remove Ordering</span></button>
                 </div>
+                {% endif %}
 
+                {% if grid.hasExport == true %}
                 <div class="mgrid-export mgrid-control-opt">
                     <select name="mgrid[export]">
                         <option value="" selected="selected">Format</option>
@@ -31,9 +39,40 @@
                     </select>
                     <button id="mgrid-export" type="button"><span>Export</span></button>
                 </div>
+                {% endif %}
+                
             </div>
+            
+            {% if grid.hasMassAction == true %}
+            <div class="gMassAction">
+                <div class="gSelect">
+                    <label for="checkAllGrid" id="checkAllGridLbl">
+                        <input name="checkAllGrid" id="checkAllGrid" type="checkbox" class="massaction-check-all" style="float: left; margin-right: 2px;"/><?php echo $this->translate('Check/Uncheck All') ?></label>
+                    <span class="massDelimiter">|</span>
+                    <span><span class="check-selected-counter">0</span> <?php echo $this->translate('selected') ?></span>
+                </div>
+                <div class="gAction">
+                    <span>Mass Action: </span>
+                    <select name="massaction-select">
+                        <option value=""></option>
+                        <?php foreach ($grid->getMassActions() as $name => $label) : ?>
+                            <option value="<?php echo $name ?>"><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button type="button" class="massaction-button"><span><?php echo $this->translate('Submit') ?></span></button>
+                </div>
+                <form class="massaction-form" method="post">
+                    <input type="hidden" value="" class="massaction-values"/>
+                </form>
+            </div>
+            {% endif %}
 
-            <table class="mgrid-table">
+            <table class="mgrid-table {% if attribs['class'] %} {{ attribs['class'] }} {% endif %}">
+                {% if attribs['caption'] %} <caption>{{ attribs['caption'] }}</caption> {% endif %}
+                
+                {% if grid.hasHeaders == true %}
+                {% endif %}
+                
                 <tbody>
                     <tr class="mgrid-table-title">
 
@@ -69,7 +108,7 @@
                                         <li><a href="/admin/access_user/edit/id/4" class="view" title=View" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>View</a></li>
                                         <li><a href="/admin/access_user/edit/id/4" class="accept" title="Accept" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Accept</a></li>
                                         <li><a href="/admin/access_user/delete/id/4" class="del" title="Delete" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Delete</a></li>
-                                        
+
                                         <li><a href="/admin/access_user/delete/id/4" class="pdf" title="Delete" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Pdf</a></li>
                                     </ul>
                                 </li>
@@ -86,9 +125,13 @@
                 </tr>
                 </tbody>
             </table>
+            
+            {% if grid.hasPager == true %}
             <div class="mgrid-pager">
                 <span>Total of 1 register(s) found.</span>
             </div>
+            {% endif %}
+            
         </div>
     </form>
 

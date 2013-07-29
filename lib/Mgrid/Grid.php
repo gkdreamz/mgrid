@@ -43,22 +43,42 @@ abstract class Grid
      * @var array columns used by grid
      */
     protected $columns = array();
-    
+
     /**
      * @var boolean
      */
-    protected $hasFilter = false;
-    
+    protected $hasFilter;
+
     /**
      * @var boolean if the grid should order results
      */
     protected $hasOrdering;
+    
+    /**
+     * @var boolean if the grid should have pager
+     */
+    protected $hasPager;
+    
+    /**
+     * @var boolean if the grid should have export
+     */
+    protected $hasExport;
+    
+    /**
+     * @var boolean if the grid should have mass actions
+     */
+    protected $hasMassAction;
+    
+    /**
+     * @var boolean if the grid should have table headers
+     */
+    protected $hasHeaders;
 
     /**
      * @var array  
      */
-    protected $resultSet = false;
-    
+    protected $resultSet;
+
     /**
      *
      * @var int 
@@ -74,17 +94,17 @@ abstract class Grid
      * @var \Mgrid\Session 
      */
     protected $sessionHandle;
-    
+
     /**
      * @var \Mgrid\Filter
      */
     protected $filterHandle;
-    
+
     /**
      * @var \Mgrid\Pager
      */
     protected $pagerHandle;
-    
+
     /**
      * @var $_REQUEST 
      */
@@ -102,16 +122,16 @@ abstract class Grid
 
         // set session handle
         $this->sessionHandle = new \Mgrid\Session;
-        
+
         // set filter handle
         $this->filterHandle = new \Mgrid\Filter;
-        
+
         // set pager handle
         $this->pagerHandle = new \Mgrid\Pager;
-        
+
         // set request
         $this->setRequest($_REQUEST);
-        
+
         // run init
         $this->init();
     }
@@ -123,7 +143,13 @@ abstract class Grid
     {
         $this->build();
 
-        return $this->twig->render('grid.html.twig', array('id' => 'demo-test-id'));
+        return $this->twig->render('grid.html.twig', array(
+                    'id'            => 'demo-test-id',
+                    'grid'          => $this,
+                    'pager'         => $this->pagerHandle->getPager(),
+                    'attributes'    => array(),
+                        )
+        );
     }
 
     /**
@@ -191,13 +217,13 @@ abstract class Grid
         }
 
         foreach ($params['mgrid']['filter'] AS $key => $value) {
-            
+
             if (is_array($value)) {
                 foreach ($value as $subKey => $subVal) {
                     if (empty($subVal)) {
                         continue 1;
                     }
-                    
+
                     $this->filterHandle->addFilter(array($key => array($subKey => $subVal)));
                 }
             } elseif (!empty($value)) {
@@ -209,21 +235,21 @@ abstract class Grid
         $this->sessionHandle->setData('filters', $params['mgrid']);
 
         // apply filters on RS
-        $this->setResultSet( $this->filterHandle->apply( $this->getColumns(), $this->getResultSet() ) );
+        $this->setResultSet($this->filterHandle->apply($this->getColumns(), $this->getResultSet()));
 
         return $this;
     }
-    
+
     /**
      * apply pager on RS
      */
     protected function processPager()
     {
-        $this->setResultSet($this->pagerHandle->apply( $this->getResultSet(), $this->getRequest() ));
-        
+        $this->setResultSet($this->pagerHandle->apply($this->getResultSet(), $this->getRequest()));
+
         return $this;
     }
-    
+
     /**
      * Add a new column
      *
@@ -267,24 +293,28 @@ abstract class Grid
      */
     public function createColumn(array $options)
     {
-        $column = new \Mgrid\Column($options);
-        return $column;
+        return new \Mgrid\Column($options);
     }
-    
+
     /**
      * Adds an user action to the grid
-     * @return Grid 
+     * 
+     * @param mixed $action
+     * @return \Mgrid\Grid
+     * @throws \Mgrid\Exception
      */
     public function addAction($action)
     {
-        if (is_array($action))
+        if (is_array($action)) {
             $action = new \Mgrid\Action($action);
-        elseif ($action instanceof Mgrid\Action)
-            $action = $action;
-        else
-            throw new \Exception('Invalid action param');
+        }
+        
+        if (!($action instanceof \Mgrid\Action)) {
+            throw new \Mgrid\Exception('Invalid action param');
+        }
 
         $this->actions[] = $action;
+        
         return $this;
     }
 
@@ -316,7 +346,7 @@ abstract class Grid
     {
         return (count($this->getActions()) && $this->showActions);
     }
-    
+
     /**
      * 
      * @param boolean $hasFilter
@@ -325,7 +355,7 @@ abstract class Grid
     public function setHasFilter($hasFilter)
     {
         $this->hasFilter = (bool) $hasFilter;
-        
+
         return $this;
     }
 
@@ -360,10 +390,10 @@ abstract class Grid
     {
         $this->resultSet = $result_set;
         $this->setNumRecords(count($result_set));
-        
+
         return $this;
     }
-    
+
     /**
      * 
      * @return array
@@ -373,10 +403,10 @@ abstract class Grid
         if ($this->resultSet === false) {
             throw new \Mgrid\Exception('You must build the grid before get the result. Use the method build()');
         }
-        
+
         return $this->resultSet;
     }
-    
+
     /**
      * Returns the columns of the grid
      * @return array
@@ -389,7 +419,7 @@ abstract class Grid
 
         return $this->columns;
     }
-    
+
     /**
      * Sets the request object
      * @param $_REQUEST $request
@@ -400,7 +430,7 @@ abstract class Grid
         $this->request = $request;
         return $this;
     }
-    
+
     /**
      * 
      * @param type $key
@@ -408,17 +438,17 @@ abstract class Grid
      */
     public function getRequest($key = false)
     {
-        if($key) {
-            if(!isset($this->request[$key])) {
+        if ($key) {
+            if (!isset($this->request[$key])) {
                 return false;
             }
-            
+
             return $this->request[$key];
         }
-        
+
         return $this->request;
     }
-    
+
     /**
      * 
      * @param int $value
@@ -427,7 +457,7 @@ abstract class Grid
     {
         $this->numRecords = (int) $value;
     }
-    
+
     /**
      * 
      * @return int
@@ -436,7 +466,7 @@ abstract class Grid
     {
         return $this->numRecords;
     }
-    
+
     /**
      * Sets id of the grid
      * 
@@ -448,12 +478,12 @@ abstract class Grid
         $this->id = (string) $id;
         return $this;
     }
-    
+
     /**
      * Checks if grid has ordering
-     * @return type 
+     * @return boolean
      */
-    public function getHasOrdering()
+    public function hasOrdering()
     {
         return $this->hasOrdering;
     }
@@ -461,12 +491,78 @@ abstract class Grid
     /**
      * Sets order for the grid
      * 
-     * @param string $column String with an index column
+     * @param string $boolean String with an index column
      * @return Mgrid 
      */
     public function setHasOrdering($boolean)
     {
         $this->hasOrdering = (bool) $boolean;
+        return $this;
+    }
+    
+    /**
+     * Checks if grid has pager
+     * @return boolean 
+     */
+    public function hasPager()
+    {
+        //return ($this->hasPager && $this->pagerHandle->hasPager());
+        return $this->hasPager;
+    }
+
+    /**
+     * Sets pager for the grid
+     * 
+     * @param string $boolean String with an index column
+     * @return Mgrid 
+     */
+    public function setHasPager($boolean)
+    {
+        $this->hasPager = (bool) $boolean;
+        return $this;
+    }
+
+    /**
+     * Checks if grid has export
+     * @return boolean 
+     */
+    public function hasMassAction()
+    {
+        //return ($this->hasPager && $this->pagerHandle->hasPager());
+        return $this->hasMassAction;
+    }
+
+    /**
+     * Sets pager for the grid
+     * 
+     * @param string $boolean String with an index column
+     * @return Mgrid 
+     */
+    public function setHasMassAction($boolean)
+    {
+        $this->hasMassAction = (bool) $boolean;
+        return $this;
+    }
+    
+    /**
+     * Checks if grid has table Headers
+     * @return boolean 
+     */
+    public function hasHeaders()
+    {
+        //return ($this->hasPager && $this->pagerHandle->hasPager());
+        return $this->hasHeaders;
+    }
+
+    /**
+     * Sets pager for the grid
+     * 
+     * @param string $boolean String with an index column
+     * @return Mgrid 
+     */
+    public function setHeaders($boolean)
+    {
+        $this->hasHeaders = (bool) $boolean;
         return $this;
     }
 }
