@@ -92,13 +92,12 @@ class Pager
     /**
      * Process the pager 
      * 
-     * @param array $result_set
+     * @param array $resultSet
      * @param array $request
-     * @return \Mgrid\Pager
+     * @return array Resultset
      */
-    public function apply(array $result_set, array $request = array())
+    public function apply(array $resultSet, array $request = array())
     {
-
         // if page don't exists
         if (null == $this->getPage()) {
             $num_page = (isset($request['page'])) ? (int) $request['page'] : 0;
@@ -107,7 +106,7 @@ class Pager
 
         if (null === $this->getPager()) {
             //get default pager
-            $pager = new \Mgrid\Pager\Builder( count($result_set), $this->getPage());
+            $pager = new \Mgrid\Pager\Builder( count($resultSet), $this->getPage());
             $this->setPager($pager);
         } else {
             //get user defined pager
@@ -116,16 +115,13 @@ class Pager
 
         $resultFiltered = array();
 
-        if (count($result_set)) {
-            foreach ($result_set as $key => $row) {
+        if (count($resultSet)) {
+            foreach ($resultSet as $key => $row) {
                 if (($key >= $pager->getOffset()) && ($key < $pager->getMaxset())) {
                     array_push($resultFiltered, $row);
                 }
             }
         }
-
-        //seto resultado filtrado pela ordenacao para a grid 
-        $this->result = $resultFiltered;
 
         //$this->getSource()
         //->setLimit($pager->getMaxPerPage())
@@ -133,6 +129,6 @@ class Pager
 
         $this->hasPager = true;
         
-        return $this;
+        return $resultFiltered;
     }
 }

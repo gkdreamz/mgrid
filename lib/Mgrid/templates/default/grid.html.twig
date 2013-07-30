@@ -1,5 +1,5 @@
-<!-- Stylesheets -->
-<style type="text/css">
+    <!-- Stylesheets -->
+    <style type="text/css">
         <!--
     {% include '/assets/css/mgrid.css' %}
         -->
@@ -7,7 +7,7 @@
 
     <form id="mgrid-form" action="?" method="get">
 
-        <div id="{{id}}" class="mgrid">
+        <div id="{{grid.getId}}" class="mgrid">
 
             <div class="mgrid-control">
 
@@ -70,59 +70,82 @@
             <table class="mgrid-table {% if attribs['class'] %} {{ attribs['class'] }} {% endif %}">
                 {% if attribs['caption'] %} <caption>{{ attribs['caption'] }}</caption> {% endif %}
                 
-                {% if grid.hasHeaders == true %}
-                {% endif %}
-                
                 <tbody>
+                    {% if grid.hasHeaders == true %}
                     <tr class="mgrid-table-title">
 
-                        <td colspan="1"></td>
-
-                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=companyName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Company</span></a></td>
-                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=roleName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Role</span></a></td>
-                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=personName&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Name</span></a></td>
-                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=username&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Username</span></a></td>
-                        <td width=""><a href="/admin/access_user/index?mgrid[colOrder]=birthday&amp;mgrid[dirOrder]=ASC" title="" class="sort"><span>Birthday</span></a></td>
-
+                        {% if grid.hasMassAction == true %}
+                            <td colspan="2"></td>
+                        {% else %}
+                            <td colspan="1"></td>
+                        {% endif %}
+                            
+                        {% for column in grid.getColumns %}
+                            {% if grid.hasOrdering == true %}
+                                <td width="{{ column.getWidth }}">
+                                    <a href="{{ column.getHref }}" title="{{ column.getLabel }}" class="{{ column.getClass }}"><span>{{ column.getLabel }}</span></a>
+                                </td>
+                            {% else %}
+                                <td width="{{ column.getWidth }}"><span>{{ column.getLabel }}</span></td>
+                            {% endif %}
+                        {% endfor %}
+                                
                     </tr>
+                    {% endif %}
+                    
+                    {% if grid.hasFilter %}
+                    <input type="hidden" name="mgrid[addFilter]" value="1" />
+                    <tr class="gTFilter">
+                        {% if grid.hasMassAction == true %}
+                            <td colspan="2"></td>
+                        {% else %}
+                            <td colspan="1"></td>
+                        {% endif %}
 
-                <input type="hidden" name="mgrid[addFilter]" value="1">
-                <tr class="mgrid-table-tr-filter">
-                    <td colspan="1"></td>
-                    <td></td>	
-                    <td></td>	
-                    <td>
-                        <input type="text" name="mgrid[filter][personName]" id="mgrid-filter-personName" value="" class="fieldMgrid" size="">
-                    </td>	
-                    <td></td>
-                    <td></td>	
+                        {% for column in grid.getColumns %}
+                            <td>
+                                {% if column.hasFilter == true %}
+                                    {{ column.getFilter.render }}
+                                {% endif %}
+                            </td>	
+                        {% endfor %}
+                    </tr>
+                    {% endif %}                
+                
+                {% for key, row in grid.getResultSet %}
+                <tr class="mgrid-table-tr-rs {% if (key % 2) %}  gRowColor {% endif %}">
+                    
+                    {% if grid.hasMassAction == true %}
+                        <td class="gRowCheck"><input type="checkbox" name="mass-id[]" class="massaction-check-opt" value="{{ row[grid.getPkIndex]}}" /></td>
+                    {% else %}
+                        <td colspan="1"></td>
+                    {% endif %}
+                        
+                    {% if grid.hasActions == true %}
+                        <td class="mgrid-table-tr-opc-row">
+                            <div class="mgrid-table-div-opc-row">
+                                <ul>
+                                    <li><img src="<?php echo $this->baseUrl('img/admin/icon_opc.gif') ?>" alt="<?php echo $this->translate('Options') ?>" />
+                                        <ul>
+                                            {% for action in grid.getActionsByRow(row) %}
+                                                {% if action.getCondition(row) == true %}
+                                                    <li><a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">{{ action.getLabel }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    {% endif %}
+                    
+                    {% for column in grid.getColumns %}
+                        <td>{{ column.getRender(row).render }}</td>
+                    {% endfor %}
+                        
                 </tr>
-
-                <tr class="mgrid-table-tr-rs ">
-                    <td class="mgrid-table-tr-opc-row">
-                        <div class="mgrid-table-div-opc-row">
-                            <ul>
-                                <li><span class="mgrid-table-div-opc-img"></span>
-                                    <ul class="mgrid-table-div-opc-row-ul-list">
-                                        <li><a href="/admin/access_user/edit/id/4" class="" title="Edit" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Edit</a></li>
-                                        <li><a href="/admin/access_user/edit/id/4" class="view" title=View" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>View</a></li>
-                                        <li><a href="/admin/access_user/edit/id/4" class="accept" title="Accept" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Accept</a></li>
-                                        <li><a href="/admin/access_user/delete/id/4" class="del" title="Delete" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Delete</a></li>
-
-                                        <li><a href="/admin/access_user/delete/id/4" class="pdf" title="Delete" target="_parent"><span class="mgrid-table-div-opc-link-img"></span>Pdf</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-
-                    <td>My Cell Company</td>
-                    <td>Administrator</td>
-                    <td>Demostration</td>
-                    <td>demo@mdnsolutions.com</td>
-                    <td></td>
-
-                </tr>
+                {% endfor %}
+                
                 </tbody>
             </table>
             

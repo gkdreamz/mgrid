@@ -99,6 +99,11 @@ abstract class Grid
      * @var \Mgrid\Filter
      */
     protected $filterHandle;
+    
+    /**
+     * @var \Mgrid\Order
+     */
+    protected $orderHandle;
 
     /**
      * @var \Mgrid\Pager
@@ -125,6 +130,9 @@ abstract class Grid
 
         // set filter handle
         $this->filterHandle = new \Mgrid\Filter;
+        
+        // set ordering handle
+        $this->orderHandle = new \Mgrid\Order;
 
         // set pager handle
         $this->pagerHandle = new \Mgrid\Pager;
@@ -144,10 +152,8 @@ abstract class Grid
         $this->build();
 
         return $this->twig->render('grid.html.twig', array(
-                    'id'            => 'demo-test-id',
                     'grid'          => $this,
                     'pager'         => $this->pagerHandle->getPager(),
-                    'attributes'    => array(),
                         )
         );
     }
@@ -161,8 +167,8 @@ abstract class Grid
     {
         // generate the grid
         $this->processSource()
-                ->processFilters()
-//                ->processOrder();
+                ->processFilter()
+                ->processOrder()
                 ->processPager();
 
         return $this;
@@ -183,7 +189,7 @@ abstract class Grid
      *
      * @return Grid
      */
-    private function processFilters()
+    private function processFilter()
     {
         // set grid with filter or not
         foreach ($this->getColumns() as $column) {
@@ -236,6 +242,20 @@ abstract class Grid
 
         // apply filters on RS
         $this->setResultSet($this->filterHandle->apply($this->getColumns(), $this->getResultSet()));
+
+        return $this;
+    }
+    
+    /**
+     * Process the ordering for columns
+     * 
+     * @return \Mgrid\Grid
+     */
+    private function processOrder()
+    {
+        $sortedResultSet = $this->orderHandle->apply($this->getColumns(), $this->getResultSet(), $this->getRequest());
+        
+        $this->setResultSet($sortedResultSet);
 
         return $this;
     }
@@ -383,13 +403,14 @@ abstract class Grid
 
     /**
      * 
-     * @param array $result_set
+     * @param array $resultSet
      * @return \Mgrid\Grid
      */
-    public function setResultSet($result_set)
+    public function setResultSet($resultSet)
     {
-        $this->resultSet = $result_set;
-        $this->setNumRecords(count($result_set));
+
+        $this->resultSet = $resultSet;
+        $this->setNumRecords(count($resultSet));
 
         return $this;
     }
@@ -403,7 +424,6 @@ abstract class Grid
         if ($this->resultSet === false) {
             throw new \Mgrid\Exception('You must build the grid before get the result. Use the method build()');
         }
-
         return $this->resultSet;
     }
 
@@ -466,6 +486,15 @@ abstract class Grid
     {
         return $this->numRecords;
     }
+    
+    /**
+     * Returns HTML id of the grid
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Sets id of the grid
@@ -494,7 +523,7 @@ abstract class Grid
      * @param string $boolean String with an index column
      * @return Mgrid 
      */
-    public function setHasOrdering($boolean)
+    public function setOrdering($boolean)
     {
         $this->hasOrdering = (bool) $boolean;
         return $this;
