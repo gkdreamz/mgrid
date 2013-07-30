@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -50,9 +49,9 @@ abstract class Grid
     protected $hasFilter;
 
     /**
-     * @var boolean if the grid should order results
+     * @var boolean if the grid should order results, by default yes
      */
-    protected $hasOrdering;
+    protected $hasOrdering = true;
     
     /**
      * @var boolean if the grid should have pager
@@ -253,8 +252,12 @@ abstract class Grid
      */
     private function processOrder()
     {
-        $sortedResultSet = $this->orderHandle->apply($this->getColumns(), $this->getResultSet(), $this->getRequest());
+        if (!$this->hasOrdering()) {
+            return $this;
+        }
         
+        // apply the sorting
+        $sortedResultSet = $this->orderHandle->apply($this->getColumns(), $this->getResultSet(), $this->getRequest());
         $this->setResultSet($sortedResultSet);
 
         return $this;

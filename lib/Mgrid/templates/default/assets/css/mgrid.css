@@ -29,7 +29,7 @@
 }
 .mgrid-pager form {
     display: inline; 
-    width: none;
+    width: 0;
 }
 .mgrid-export {
     float: right;

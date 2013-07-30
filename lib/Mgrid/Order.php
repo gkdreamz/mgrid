@@ -21,7 +21,7 @@
 namespace Mgrid;
 
 /**
- * Handle the filters
+ * Handle the sorting process
  *
  * 
  * @since       0.0.2
@@ -80,53 +80,32 @@ class Order
      */
     private function processColumnOrder(array $columns, array $params)
     {
-        // checo se tenho ordenacao
-//        if (!$this->hasOrdering()) {
-//            $blnOrdering = false;
-//            //caso alguma coluna definida seto grid com ordenacao
-//            foreach ($columns as $column) {
-//                if ($column->hasOrdering() === true)
-//                    $blnOrdering = true;
-//                else
-//                    $column->setHasOrdering(false);
-//            }
-//
-//            if (!$blnOrdering)
-//                return $this;
-//
-//            $this->setHasOrdering($blnOrdering);
-//        }
-
         // remove sorting out of the session
         if (isset($params['mgrid']['removeOrder'])) {
             $this->sessionHandle->unsetData('ordering');
         }
-        // order
-        $colOrder = false;
-        $dirOrder = false;
         
-        // checo coluna selecionada via session ou parametros
+        // case ordering params are in the session
         if($this->sessionHandle->hasParam('ordering')) {
             $sorting = $this->sessionHandle->getData('ordering');
             $colOrder = $sorting['colOrder'];
             $dirOrder = $sorting['dirOrder'];
         }
 
-        $colOrder = (isset($params['mgrid']['colOrder'])) ? $params['mgrid']['colOrder'] : $colOrder;
-        $dirOrder = (isset($params['mgrid']['dirOrder'])) ? $params['mgrid']['dirOrder'] : $dirOrder;
+        $colOrder = (isset($params['mgrid']['colOrder'])) ? $params['mgrid']['colOrder'] : false;
+        $dirOrder = (isset($params['mgrid']['dirOrder'])) ? $params['mgrid']['dirOrder'] : false;
 
-        //checo colunas com ordering
+        // check columns with sorting
         foreach ($columns as $column) {
-            if ($colOrder == $column->getIndex()) {
-                //nova ordenacao para a coluna
-                $column->setDirOrder((($dirOrder == 'ASC') ? 'DESC' : 'ASC'));
-            }
-        }
-
-        //defino colunas nulas com ordenacao
-        foreach ($columns as $column) {
-            if ($column->hasOrdering() === null)
+            if ($column->hasOrdering() === null) {
                 $column->setOrdering(true);
+            }
+            
+            if ($colOrder != $column->getIndex()) {
+                continue 1;
+            }
+            
+            $column->setDirOrder(($dirOrder == 'ASC') ? 'DESC' : 'ASC');
         }
         
         return array(
@@ -145,10 +124,10 @@ class Order
      */
     private function orderBy($data, $field, $direction = 'ASC')
     {
-        //verifico se tenho datas para converter para strings
+        // look up for date objects
         $code = "if (is_object(\$a['$field']) && (get_class(\$a['$field']) == 'DateTime')) \$a['$field'] = \$a['$field']->format('Ymd'); ";
         $code .= "if (is_object(\$b['$field']) && (get_class(\$b['$field']) == 'DateTime')) \$b['$field'] = \$b['$field']->format('Ymd'); ";
-        //ordenacao
+        // get it sorted
         $code .= "return strnatcmp(\$a['$field'], \$b['$field']);";
         usort($data, create_function('$a,$b', $code));
 

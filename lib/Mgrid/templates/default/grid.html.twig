@@ -1,11 +1,9 @@
     <!-- Stylesheets -->
     <style type="text/css">
-        <!--
     {% include '/assets/css/mgrid.css' %}
-        -->
     </style>
 
-    <form id="mgrid-form" action="?" method="get">
+    <form id="mgrid-form" action="http://localhost/test/app/index.php?mgrid[removeOrder]=1" method="get">
 
         <div id="{{grid.getId}}" class="mgrid">
 
@@ -159,3 +157,6 @@
     </form>
 
     <!-- Javascript -->
+    <script type="text/javascript">
+    {% include '/assets/js/mgridloader.js' %}
+    </script>
