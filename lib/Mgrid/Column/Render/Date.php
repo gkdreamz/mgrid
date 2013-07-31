@@ -25,7 +25,7 @@ use Mgrid\Column\Render;
 /**
  * Render for date values
  * 
- * @since       0.0.2
+ * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
 

@@ -2,6 +2,7 @@
 
 Mgrid generates for you a optimal and handy grid. This version has great 
 improvements in regardless to renders, dependencies and refactoring the code.
+Please take a look at the [`changelog`][1]
 
 
 ## Instalation
@@ -48,11 +49,12 @@ See the `doc` directory for more detailed documentation or go to http://mgrid.md
 ##Requirements
 
 - Any flavor of PHP 5.3 or above should do
+- Twig template engine 1.* version
 - [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
 
 ##Submitting bugs and feature requests
 
-Bugs and feature request are tracked on [GitHub](http://mgrid.mdnsolutions.com/issues)
+Bugs and feature request are tracked on [GitHub](https://github.com/medinadato/mgrid/issues)
 
 
 ##Frameworks Integration
@@ -74,3 +76,4 @@ Mgrid is licensed under the MIT License - see the `LICENSE` file for details
 
 [1]: http://mgrid.mdnsolutions.com/download
 [2]: https://github.com/medinadato/mgrid/
+[3]: http://mgrid.mdnsolutions.com/changelog

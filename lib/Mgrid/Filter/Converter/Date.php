@@ -18,7 +18,7 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Converter;
+namespace Mgrid\Filter\Converter;
 
 /**
  * Handle the date type filters
@@ -44,4 +44,5 @@ class Date
 
         return (int) $ano . $mes . $dia;
     }
+    
 }

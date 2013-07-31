@@ -213,3 +213,11 @@ input#checkAllMgrid {
 span.massDelimiter {
     margin:0 15px;
 }
+
+/**************************
+* Form
+***************************/
+
+.mgrid-filter-field {
+    width: 100%;
+}

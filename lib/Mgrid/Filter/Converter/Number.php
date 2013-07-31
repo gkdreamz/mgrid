@@ -18,7 +18,7 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Converter;
+namespace Mgrid\Filter\Converter;
 
 /**
  * Handle the numeric filters

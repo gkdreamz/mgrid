@@ -66,7 +66,7 @@ class Filter
      */
     public function apply(array $columns, array $resultSet)
     {
-        $dateConverter = new \Mgrid\Converter\Date;
+        $dateConverter = new \Mgrid\Filter\Converter\Date;
         
         $filters = $this->getFilters();
 
@@ -224,7 +224,7 @@ class Filter
     private function gridFiltersConditions($condition, $fieldVal, $filterVal)
     {
         
-        $numberConverter = new \Mgrid\Converter\Number;
+        $numberConverter = new \Mgrid\Filter\Converter\Number;
         
         
         switch ($condition) {

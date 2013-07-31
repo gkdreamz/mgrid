@@ -26,6 +26,7 @@ namespace Mgrid;
  * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
+
 class Column
 {
 
@@ -130,11 +131,11 @@ class Column
                 if (!is_object($value))
                     continue;
 
-            if (method_exists($this, $method))
-            // Setter exists; use it
-                $this->$method($value);
-            else
-                throw new Grid\Exception("Unknown option {$method}");
+            if (!method_exists($this, $method)) {
+                throw new \Mgrid\Exception("Unknown option {$method}");
+            }
+            
+            $this->$method($value);
         }
         return $this;
     }

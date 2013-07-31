@@ -44,9 +44,9 @@ abstract class Grid
     protected $columns = array();
 
     /**
-     * @var boolean
+     * @var boolean it is set by the columns when at least one of them has filter
      */
-    protected $hasFilter;
+    protected $hasFilter = false;
 
     /**
      * @var boolean if the grid should order results, by default yes
@@ -371,18 +371,6 @@ abstract class Grid
     }
 
     /**
-     * 
-     * @param boolean $hasFilter
-     * @return \Mgrid\Grid
-     */
-    public function setHasFilter($hasFilter)
-    {
-        $this->hasFilter = (bool) $hasFilter;
-
-        return $this;
-    }
-
-    /**
      * @param Mgrid\Source\SourceInterface $source
      * @return Grid 
      */
@@ -508,6 +496,27 @@ abstract class Grid
     public function setId($id)
     {
         $this->id = (string) $id;
+        return $this;
+    }
+    
+    /**
+     * Checks if grid has filters
+     * @return boolean
+     */
+    public function hasFilter()
+    {
+        return $this->hasFilter;
+    }    
+
+    /**
+     * 
+     * @param boolean $hasFilter
+     * @return \Mgrid\Grid
+     */
+    public function setHasFilter($hasFilter)
+    {
+        $this->hasFilter = (bool) $hasFilter;
+
         return $this;
     }
 
