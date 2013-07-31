@@ -2,6 +2,13 @@
 
 Mgrid generates for you a optimal and handy grid.
 
+[ DO NOT USE THIS VERSION, THE NUMBER OF BUGS ARE UNBELIEVABLE]
+[ PLEASE DOWNLOAD THE v.0.0.2]
+
+Thanks, Renato Medina.
+
+
+
 ## Instalation
 
 The recommended way to install Mgrid is [through
