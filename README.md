@@ -1,6 +1,8 @@
 # Mgrid - Grid solution for PHP 5
 
-Mgrid generates for you a optimal and handy grid.
+Mgrid generates for you a optimal and handy grid. This version has great 
+improvements in regardless to renders, dependencies and refactoring the code.
+
 
 ## Instalation
 
