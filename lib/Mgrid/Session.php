@@ -40,11 +40,14 @@ class Session
      */
     public function __construct()
     {
+        
         if (!isset($_SESSION)) {
             session_start();
         }
 
-        $_SESSION['mdn_mgrid'] = NULL;
+        if(!isset($_SESSION['mdn_mgrid'])) {
+//            $_SESSION['mdn_mgrid'] = NULL;
+        }
 
         $this->session = $_SESSION['mdn_mgrid'];
     }

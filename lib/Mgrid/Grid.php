@@ -208,14 +208,20 @@ abstract class Grid
 
         // add valid filters
         if (isset($params['mgrid']['addFilter'])) {
-            $this->sessionHandle->unsetData('filters');
+            $this->sessionHandle->setData('filters', $params['mgrid']['filter']);
         }
+echo "<pre>";
+//var_export($params['mgrid']);
+var_export($this->sessionHandle);
+//var_export($params['mgrid']);
 
         // there is parametes into the session
         if ($this->sessionHandle->hasParam('filters')) {
-            $params['mgrid'] = $this->sessionHandle->getData('filters');
+            $params['mgrid'] = array_merge($params['mgrid'], $this->sessionHandle->getData('filters'));
         }
-
+//var_export($params['mgrid']);
+echo "</pre>";
+//exit;
         // case no params for filter
         if (!isset($params['mgrid']['filter'])) {
             return $this;
