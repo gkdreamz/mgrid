@@ -43,7 +43,14 @@ class Filter
      */
     public function addFilter($key, $value)
     {
-        $this->filters[$key] = $value;
+        $myfn = function($key, $value) use (&$myfn) {
+                    if (is_array($key)) {
+                        return (count($key) > 0) ? array($key[0] => $myfn(array_slice($key, 1), $value)) : $value;
+                    }
+                    return array($key => $value);
+                };
+
+        $this->filters = array_merge($this->filters, $myfn($key, $value));
 
         return $this;
     }
@@ -67,7 +74,7 @@ class Filter
     public function apply(array $columns, array $resultSet)
     {
         $dateConverter = new \Mgrid\Filter\Converter\Date;
-        
+
         $filters = $this->getFilters();
 
         // return raw rs
@@ -107,7 +114,7 @@ class Filter
                         // loop nos campos do tipo do filtro
                         foreach ($fieldFilter as $field => $value) {
                             foreach ($conditions['range'] as $typeCond => $condition)
-                                // caso filtro com mesmo nome da coluna
+                            // caso filtro com mesmo nome da coluna
                                 if (($field == $column->getIndex()) && ($keyCond == $typeCond)) {
                                     $column->getFilter()->getRender()->setAttributeValue("value[{$typeCond}]", $value);
                                 }
@@ -116,7 +123,7 @@ class Filter
                 } else {
                     //loop nos filtros
                     foreach ($filters as $filter => $value)
-                        //caso filtro com mesmo nome da coluna
+                    //caso filtro com mesmo nome da coluna
                         if ($filter == $column->getIndex()) {
                             //populo valor padrao
                             $column->getFilter()->getRender()->setAttributeValue('value', $value);
@@ -202,7 +209,7 @@ class Filter
                     }
                 }
             }
-            
+
             //posso adicionar
             if ($bln_filter) {
                 array_push($resultSetFiltered, $row);
@@ -211,7 +218,6 @@ class Filter
 
         return $resultSetFiltered;
     }
-    
 
     /**
      * Checa as condicoes dos valores do campo com a da culuna baseados na condicao
@@ -223,10 +229,10 @@ class Filter
      */
     private function gridFiltersConditions($condition, $fieldVal, $filterVal)
     {
-        
+
         $numberConverter = new \Mgrid\Filter\Converter\Number;
-        
-        
+
+
         switch ($condition) {
             case '>=':
                 if ($numberConverter->toInt($fieldVal) >= $numberConverter->toInt($filterVal))

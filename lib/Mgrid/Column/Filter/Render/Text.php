@@ -44,18 +44,10 @@ class Text extends Render\ARender implements Render\IRender
         $attributes['name'] = $attributes['id'] = 'mgrid[filter][' . $this->getFieldIndex() . ']';
 
         $html = '<input type="text" ';
-        
-        foreach($attributes as $name => $value) {
-            if(is_array($value)) {
-                $value = implode(' ', $value);
-            }
-            
-            $html .= ' ' . $name . '="' . $value . '" ';
-        }
-        
+        $html .= $this->generateHtmlOfAttributes($html, $attributes);
         $html .= ' />';
         
-        echo $html;
+        return $html;
     }
 
 }

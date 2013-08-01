@@ -163,22 +163,23 @@ class Column
     public function setRender($render)
     {
         if (is_array($render)) {
-            if (isset($render['type'])) {
-                $type = ucfirst($render['type']);
-                $className = "\Mgrid\Column\Render\\{$type}";
-                $options = isset($render['options']) ? $render['options'] : array();
-                $render = new $className($options);
-            } else {
-                throw new \Exception("Renders specified by array must have a 'type' index");
+            if (!isset($render['type'])) {
+                throw new \Mgrid\Exception("Renders specified by array must have a 'type' index");
             }
-        } elseif (is_object($render) && $render instanceof Mgrid\Column\Render\IRender) {
+            
+            $type = ucfirst($render['type']);
+            $className = "\Mgrid\Column\Render\\{$type}";
+            $options = isset($render['options']) ? $render['options'] : array();
+            $render = new $className($options);
+                
+        } elseif (is_object($render) && $render instanceof \Mgrid\Column\Render\IRender) {
             $render = $render;
         } elseif (is_string($render)) {
             $render = ucfirst($render);
             $className = "\Mgrid\Column\Render\\{$render}";
             $render = new $className;
         } else {
-            throw new \Exception('Invalid render');
+            throw new \Mgrid\Exception('Invalid render');
         }
 
         $render->setColumn($this);

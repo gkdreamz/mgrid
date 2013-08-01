@@ -103,7 +103,7 @@
                         {% for column in grid.getColumns %}
                             <td>
                                 {% if column.hasFilter == true %}
-                                    {{ column.getFilter.render }}
+                                    {{ column.getFilter.render | raw }}
                                 {% endif %}
                             </td>	
                         {% endfor %}

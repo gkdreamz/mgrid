@@ -229,7 +229,7 @@ abstract class Grid
                         continue 1;
                     }
 
-                    $this->filterHandle->addFilter(array($key => array($subKey => $subVal)));
+                    $this->filterHandle->addFilter(array($key, $subKey), $subVal);
                 }
             } elseif (!empty($value)) {
                 $this->filterHandle->addFilter($key, $value);

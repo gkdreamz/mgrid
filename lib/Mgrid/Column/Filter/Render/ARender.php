@@ -21,7 +21,7 @@
 namespace Mgrid\Column\Filter\Render;
 
 /**
- * A Render
+ * Abstract Render
  *
  * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
@@ -180,6 +180,25 @@ abstract class ARender
         $attributes['value'] = isset($attributes['value']) ? $attributes['value'] : '' ;
 
         $this->attributes = $attributes;
+    }
+    
+    /**
+     * 
+     * @param string $html
+     * @param array $attributes
+     * @return string
+     */
+    protected function generateHtmlOfAttributes($html = '', array $attributes = array())
+    {
+        foreach($attributes as $name => $value) {
+            if(is_array($value)) {
+                $value = implode(' ', $value);
+            }
+            
+            $html .= ' ' . $name . '="' . $value . '" ';
+        }
+        
+        return $html;
     }
 
     /**
