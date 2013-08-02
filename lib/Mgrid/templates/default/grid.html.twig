@@ -79,7 +79,7 @@
                         {% endif %}
                             
                         {% for column in grid.getColumns %}
-                            {% if grid.hasOrdering == true %}
+                            {% if (grid.hasOrdering == true  and column.hasOrdering == true) %}
                                 <td width="{{ column.getWidth }}">
                                     <a href="{{ column.getHref }}" title="{{ column.getLabel }}" class="{{ column.getClass }}"><span>{{ column.getLabel }}</span></a>
                                 </td>
@@ -148,9 +148,7 @@
             </table>
             
             {% if grid.hasPager == true %}
-            <div class="mgrid-pager">
-                <span>Total of 1 register(s) found.</span>
-            </div>
+            {% include 'pager.twig' %}
             {% endif %}
             
         </div>

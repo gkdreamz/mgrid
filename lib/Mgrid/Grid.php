@@ -56,7 +56,7 @@ abstract class Grid
     /**
      * @var boolean if the grid should have pager
      */
-    protected $hasPager;
+    protected $hasPager = true;
     
     /**
      * @var boolean if the grid should have export
@@ -71,7 +71,7 @@ abstract class Grid
     /**
      * @var boolean if the grid should have table headers
      */
-    protected $hasHeaders;
+    protected $hasHeaders = true;
 
     /**
      * @var array  
@@ -202,26 +202,23 @@ abstract class Grid
 
         // remove filters
         if (isset($params['mgrid']['removeFilter'])) {
-            $this->sessionHandle->unsetData('filters');
+            $this->sessionHandle->unsetData('filter');
             return $this;
         }
 
         // add valid filters
         if (isset($params['mgrid']['addFilter'])) {
-            $this->sessionHandle->setData('filters', $params['mgrid']['filter']);
+            $this->sessionHandle->setData('filter', $params['mgrid']['filter']);
         }
-echo "<pre>";
-//var_export($params['mgrid']);
-var_export($this->sessionHandle);
-//var_export($params['mgrid']);
 
         // there is parametes into the session
-        if ($this->sessionHandle->hasParam('filters')) {
-            $params['mgrid'] = array_merge($params['mgrid'], $this->sessionHandle->getData('filters'));
+        if ($this->sessionHandle->hasParam('filter')) {
+            if(!isset($params['mgrid']['filter'])) {
+                $params['mgrid']['filter'] = array();
+            }
+            $params['mgrid']['filter'] = array_merge($params['mgrid']['filter'], $this->sessionHandle->getData('filter'));
         }
-//var_export($params['mgrid']);
-echo "</pre>";
-//exit;
+        
         // case no params for filter
         if (!isset($params['mgrid']['filter'])) {
             return $this;
@@ -243,7 +240,7 @@ echo "</pre>";
         }
 
         // add filters to session
-        $this->sessionHandle->setData('filters', $params['mgrid']);
+        $this->sessionHandle->setData('filter', $params['mgrid']['filter']);
 
         // apply filters on RS
         $this->setResultSet($this->filterHandle->apply($this->getColumns(), $this->getResultSet()));
@@ -563,7 +560,7 @@ echo "</pre>";
      * @param string $boolean String with an index column
      * @return Mgrid 
      */
-    public function setHasPager($boolean)
+    public function setPager($boolean)
     {
         $this->hasPager = (bool) $boolean;
         return $this;

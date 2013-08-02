@@ -40,7 +40,7 @@ class Select extends Render\ARender implements Render\IRender
         //adiciono primeira opcao como tudo
         $attributes = $this->getAttributes();
 
-        $options = '';
+        $options = '<option value = "">-</option>';
         foreach ($attributes['multiOptions'] as $key => $value) {
             $options .= '<option value = "' . $key . '">' . $value . '</option>';
         }

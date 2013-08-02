@@ -28,28 +28,25 @@ namespace Mgrid;
  */
 class Session
 {
-
+    
     /**
-     *
-     * @var $_SESSION 
+     * Teh suffix for the session name
+     * @var string 
      */
-    private $session;
+    private $suffix = 'mgrid';
 
     /**
      * 
      */
     public function __construct()
     {
-        
         if (!isset($_SESSION)) {
             session_start();
         }
 
-        if(!isset($_SESSION['mdn_mgrid'])) {
-//            $_SESSION['mdn_mgrid'] = NULL;
+        if(!isset($_SESSION[$this->suffix])) {
+            $_SESSION[$this->suffix] = NULL;
         }
-
-        $this->session = $_SESSION['mdn_mgrid'];
     }
 
     /**
@@ -59,7 +56,7 @@ class Session
      */
     public function hasParam($key)
     {
-        if (isset($this->session[$key])) {
+        if (isset($_SESSION[$this->suffix][$key])) {
             return true;
         }
 
@@ -75,8 +72,7 @@ class Session
      */
     public function setData($key, $value)
     {
-        $this->session[$key] = $value;
-
+        $_SESSION[$this->suffix][$key] = $value;
         return $this;
     }
 
@@ -88,14 +84,14 @@ class Session
     public function getData($key = false)
     {
         if (!$key) {
-            return $this->session;
+            return $_SESSION[$this->suffix];
         }
 
-        if (!isset($this->session[$key])) {
+        if (!isset($_SESSION[$this->suffix][$key])) {
             return false;
         }
 
-        return $this->session[$key];
+        return $_SESSION[$this->suffix][$key];
     }
 
     /**
@@ -105,11 +101,11 @@ class Session
      */
     public function unsetData($key)
     {
-        if (!isset($this->session[$key])) {
+        if (!isset($_SESSION[$this->suffix][$key])) {
             return false;
         }
 
-        unset($this->session[$key]);
+        unset($_SESSION[$this->suffix][$key]);
 
         return true;
     }

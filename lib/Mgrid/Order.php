@@ -80,6 +80,9 @@ class Order
      */
     private function processColumnOrder(array $columns, array $params)
     {
+        $colOrder = false;
+        $dirOrder = false;
+        
         // remove sorting out of the session
         if (isset($params['mgrid']['removeOrder'])) {
             $this->sessionHandle->unsetData('ordering');
@@ -92,8 +95,10 @@ class Order
             $dirOrder = $sorting['dirOrder'];
         }
 
-        $colOrder = (isset($params['mgrid']['colOrder'])) ? $params['mgrid']['colOrder'] : false;
-        $dirOrder = (isset($params['mgrid']['dirOrder'])) ? $params['mgrid']['dirOrder'] : false;
+        if(isset($params['mgrid']['colOrder']) && isset($params['mgrid']['dirOrder'])) {
+            $colOrder =  $params['mgrid']['colOrder'];
+            $dirOrder =  $params['mgrid']['dirOrder'];
+        }
 
         // check columns with sorting
         foreach ($columns as $column) {
