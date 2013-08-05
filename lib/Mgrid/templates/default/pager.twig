@@ -1,34 +1,31 @@
-{% set prevParams = [grid.getPager.getPreviousPage] %}
-{% set nextParams = [grid.getPager.getNextPage] %}
-{% set prevUrl = '' %}
-{% set nextUrl = '' %}
-
 <div class="gPager">
-    {% if grid.getPager == true %}
-    {% set leftOff = (grid.getPager.getPreviousPage) ? '_off' : '' %}
-    {% set rightOff = (grid.getPager.getNextPage == grid.getPager.getTotalPages) ? '_off' : '' %}
-        <span>{{ Page }}</span>
-        <a href="<?php echo $prevUrl; ?>"><img src="<?php echo $this->baseUrl('img/admin/pager_arrow_left' . $leftOff . '.gif') ?>" alt="&lt;" /></a>
+    {% if grid.hasPager == true %}
+    {% set leftOff = (pager.getPreviousPage) ? 'mgrid-previous-off' : '' %}
+    {% set rightOff = (pager.getNextPage == pager.getTotalPages) ? 'mgrid-next-off' : '' %}
+        
+        {% if pager.getTotalPages > 0 %}
+        <span>Page </span>
+        <a href="{{ pager.getPreviousUrl }}" class="mgrid-pager-icon mgrid-pager-previous {{ leftOff }}">&gt;</a>
 
-        <select name="page" class="gPagerFormSelect" style="text-align: center;">
-            <?php
-            for ($i = 1; $i <= $pager->getTotalPages(); $i++):
-                //monto a url dinamicamente
-                $url = $this->url(array('page' => $i)) . '?' . $_SERVER['QUERY_STRING'];
-                ?>
-                <option value="<?php echo $url ?>" <?php
-        if ($i == $pager->getPage()) :
-            echo 'selected="selected"';
-        endif;
-                ?>><?php echo $i; ?>
-                </option>
-            <?php endfor; ?>
+        <select name="page" class="mgrid-pager-select">
+            {% for key in 1..pager.getTotalPages %}
+                {% set url = pager.getCurUrl(key) %}
+                
+                {% set selected = '' %}
+                {% if pager.getCurPos == key %}
+                {% set selected = 'selected="selected"' %}
+                {% endif %}
+                
+                <option value="{{ url }}" {{ selected }}>{{ key }}</option>
+            {% endfor %}
         </select>
 
-        <a href="<?php echo $nextUrl; ?>"><img src="<?php echo $this->baseUrl('img/admin/pager_arrow_right' . $rightOff . '.gif'); ?>" alt="&lt;" /></a>
-        <span><?php echo $this->translate('of') . ' ' . $pager->getTotalPages() . ' ' . $this->translate('pages') ?></span>
-
-<!--        <span class="massDelimiter">|</span>
+        <a href="{{ pager.getNextUrl }}" class="mgrid-pager-icon mgrid-pager-next {{ rightOff }}">&gt;</a>
+        
+        <span> of {{ pager.getTotalPages }} page(s) | </span>
+        {% endif %}
+<!--        
+        <span class="massDelimiter">|</span>
         <span><?php echo $this->translate('View') ?></span>
 
         <select name="maxPerPage">
@@ -37,7 +34,8 @@
         </select>
 
         <span><?php echo $this->translate('per page') ?></span>
-        <span class="massDelimiter">|</span>-->
-    <span>Total of XX register(s) found</span>
+        <span class="massDelimiter">|</span>
+-->
     {% endif %}
+    <span>Total of {{ pager.getNumRecords }} register(s) found.</span>
 </div>

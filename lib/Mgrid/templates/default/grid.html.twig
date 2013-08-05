@@ -10,9 +10,7 @@
             <div class="mgrid-control">
 
                 {% if grid.hasPager == true %}
-                <div class="mgrid-pager mgrid-control-opt">
-                    <span>Total of 1 register(s) found.</span>
-                </div>
+                {% include 'pager.twig' %}
                 {% endif %}
 
                 {% if grid.hasFilter == true %}

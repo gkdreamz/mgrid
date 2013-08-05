@@ -20,6 +20,8 @@
     margin-right: 10px;
 }
 
+/** Mgrid - Pager */
+
 .mgrid-pager {
     float:left;
     width: auto;
@@ -31,6 +33,30 @@
     display: inline; 
     width: 0;
 }
+
+a.mgrid-pager-icon {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    overflow: hidden;
+    text-indent: 50px;
+    vertical-align: middle;
+}
+
+select.mgrid-pager-select {
+    min-height: 26px;
+}
+
+a.mgrid-pager-previous {
+    background: url('assets/img/icons.png') -248px -283px no-repeat;
+}
+
+a.mgrid-pager-next {
+    background: url('assets/img/icons.png') -188px -283px no-repeat;
+}
+
+/** Mgrid - Export */
+
 .mgrid-export {
     float: right;
 }
