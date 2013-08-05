@@ -324,71 +324,6 @@ class Pager
         return min($this->getNumResults(), ($this->getPage() * $this->getMaxPerPage()));
     }
 
-//    /**
-//     *
-//     * Return true if it's necessary to paginate or false if not
-//     *
-//     * @return bool
-//     */
-//    public function haveToPaginate()
-//    {
-//        return $this->getNumResults() > $this->getMaxPerPage();
-//    }
-//
-//    /**
-//     * getLastPage
-//     *
-//     * Returns the maximum number of itens per page
-//     *
-//     * @return int        maximum number of itens per page
-//     */
-//    public function getMaxPerPage()
-//    {
-//        return $this->maxPerPage;
-//    }
-//
-//    /**
-//     * setMaxPerPage
-//     *
-//     * Defines the maximum number of itens per page and automatically adjust offset and limits
-//     *
-//     * @param $max       maximum number of itens per page
-//     * @return Pager
-//     */
-//    public function setMaxPerPage($max)
-//    {
-//        if (0 < (int) $max) {
-//            $this->maxPerPage = $max;
-//            
-//            // settings
-////            $this->adjustOffset();
-//        }
-//        
-//        $this->adjustOffset();
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * getResultsInPage
-//     *
-//     * Returns the number of itens in current page
-//     *
-//     * @return int    Number of itens in current page
-//     */
-//    public function getResultsInPage()
-//    {
-//        $page = $this->getPage();
-//
-//        if ($page != $this->getLastPage()) {
-//            return $this->getMaxPerPage();
-//        }
-//
-//        $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
-//
-//        return abs($this->getNumResults() - $offset);
-//    }
-//
     /**
      * 
      * @param array $params
@@ -396,8 +331,7 @@ class Pager
      */
     public function getUrl(array $params = array())
     {
-        return 'http://localhost/test/app/index.php';
-//        $url = $this->url(array('page' => $i)) . '?' . $_SERVER['QUERY_STRING'];
+        return $_SERVER['DOCUMENT_URI'];
     }
     
     /**
