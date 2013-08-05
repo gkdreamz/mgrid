@@ -196,9 +196,9 @@ class ArraySource extends Source\SourceAbstract implements Source\SourceInterfac
 
     public function execute()
     {
-        $result = $this->_cleanQueryResults($this->rawResult);
+        return $this->_cleanQueryResults($this->rawResult);
         
-        return array_slice($result, $this->offset, 25);
+//        return array_slice($result, $this->offset, 25);
     }
     
     /**

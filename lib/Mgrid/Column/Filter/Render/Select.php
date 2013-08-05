@@ -39,12 +39,13 @@ class Select extends Render\ARender implements Render\IRender
     {
         //adiciono primeira opcao como tudo
         $attributes = $this->getAttributes();
-
+        
         $options = '<option value = "">-</option>';
         foreach ($attributes['multiOptions'] as $key => $value) {
-            $options .= '<option value = "' . $key . '">' . $value . '</option>';
+            $selected = ($attributes['value'] == $key) ? 'selected="selected"' : '';
+            $options .= '<option value = "' . $key . '" ' . $selected . '>' . $value . '</option>';
         }
-        unset($attributes['multiOptions']);
+        unset($attributes['multiOptions'], $attributes['value']);
 
         // set name
         $attributes['name'] = $attributes['id'] = 'mgrid[filter][' . $this->getFieldIndex() . ']';

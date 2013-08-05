@@ -39,7 +39,7 @@ class Text extends Render\ARender implements Render\IRender
     public function render()
     {
         $attributes = $this->getAttributes();
-
+        
         // set name
         $attributes['name'] = $attributes['id'] = 'mgrid[filter][' . $this->getFieldIndex() . ']';
 
