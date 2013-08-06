@@ -13,7 +13,7 @@ if (isset($_SERVER['QUERY_STRING'])) {
     $nextUrl.= '?' . $_SERVER['QUERY_STRING'];
 }
 ?>
-<div class="gPager">
+<div class="mgrid-pager">
     <?php
     if ($pager->haveToPaginate()) :
         $leftOff = ($pager->getPreviousPage() == 1) ? '_off' : '';

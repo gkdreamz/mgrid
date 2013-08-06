@@ -1,4 +1,4 @@
-    <form id="mgrid-form" action="http://localhost/test/app/index.php?mgrid[removeOrder]=1" method="get">
+    <form id="mgrid-form" action="?" method="get">
 
         <div id="{{grid.getId}}" class="mgrid">
 
@@ -64,11 +64,13 @@
                 <tbody>
                     {% if grid.hasHeaders == true %}
                     <tr class="mgrid-table-title">
-
+                        
+                        {% if grid.hasActions == true %}
+                            <td></td>
+                        {% endif %}
+                            
                         {% if grid.hasMassAction == true %}
-                            <td colspan="2"></td>
-                        {% else %}
-                            <td colspan="1"></td>
+                            <td></td>
                         {% endif %}
                             
                         {% for column in grid.getColumns %}
@@ -86,11 +88,14 @@
                     
                     {% if grid.hasFilter %}
                     <input type="hidden" name="mgrid[addFilter]" value="1" />
-                    <tr class="gTFilter">
+                    <tr class="mgrid-table-filter">
+                        
+                        {% if grid.hasActions == true %}
+                            <td></td>
+                        {% endif %}
+                            
                         {% if grid.hasMassAction == true %}
-                            <td colspan="2"></td>
-                        {% else %}
-                            <td colspan="1"></td>
+                            <td></td>
                         {% endif %}
 
                         {% for column in grid.getColumns %}
@@ -104,23 +109,25 @@
                     {% endif %}                
                 
                 {% for key, row in grid.getResultSet %}
-                <tr class="mgrid-table-tr-rs {% if (key % 2) %}gRowColor{% endif %}">
+                <tr class="mgrid-table-tr-rs {% if (key % 2) %}mgrid-table-tr-rs-color{% endif %}">
                     
                     {% if grid.hasMassAction == true %}
                         <td class="gRowCheck"><input type="checkbox" name="mass-id[]" class="massaction-check-opt" value="{{ row[grid.getPkIndex]}}" /></td>
-                    {% else %}
-                        <td colspan="1"></td>
                     {% endif %}
                         
                     {% if grid.hasActions == true %}
                         <td class="mgrid-table-tr-opc-row">
                             <div class="mgrid-table-div-opc-row">
                                 <ul>
-                                    <li><img src="<?php echo $this->baseUrl('img/admin/icon_opc.gif') ?>" alt="<?php echo $this->translate('Options') ?>" />
-                                        <ul>
+                                    <li><span class="mgrid-table-tr-opc-icon">Options</span>
+                                        <ul class="mgrid-table-div-opc-row-ul-list">
                                             {% for action in grid.getActionsByRow(row) %}
                                                 {% if action.getCondition(row) == true %}
-                                                    <li><a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">{{ action.getLabel }}</a></li>
+                                                <li>
+                                                    <a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
+                                                        <span class="mgrid-table-div-opc-link-img"></span>{{ action.getLabel }}
+                                                    </a>
+                                                </li>
                                                 {% endif %}
                                             {% endfor %}
                                         </ul>

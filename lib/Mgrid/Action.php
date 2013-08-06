@@ -200,9 +200,8 @@ class Action
     public function getCondition($row)
     {
 	$cond = $this->condition;
-	 $a = ($cond != null) ? call_user_func($cond, $row) : true;
-         
-         return $a;
+        
+	return ($cond != null) ? call_user_func($cond, $row) : true;
     }
 
     /**
@@ -261,37 +260,40 @@ class Action
      */
     public function attendToRowCondition(array $row)
     {
-	$condition = $this->getCondition($row);
+	$this->getCondition($row);
+        
 	return true;
     }
 
     /**
      * returns the url string based on a row
+     * 
      * @param array $row
      * @return string
      */
     public function getUrl(array $row)
     {
 	$params = array();
+        $url = '';
 
 	if (null !== $this->getUserDefinedUrl()) {
-	    //returns full defined url
-	    $url = $this->getUserDefinedUrl();
-	} else {
-	    //build a zend framework url
-	    if (null !== $this->getActionName())
-		$params['action'] = $this->getActionName();
-	    if (null !== $this->getControllerName())
-		$params['controller'] = $this->getControllerName();
-	    if (null !== $this->getPkIndex())
-		$params[$this->getPkIndex()] = $row[$this->getPkIndex()];
-	    if (null !== $this->getParams())
-		$params = array_merge($params, $this->getParams());
+	    return $this->getUserDefinedUrl();
+	} 
+	    
+        if (null !== $this->getActionName()) {
+            $params['action'] = $this->getActionName();
+        }
 
-
-	    $helper = new \Zend_View_Helper_Url;
-	    $url = $helper->url($params);
-	}
+        if (null !== $this->getControllerName()) {
+            $params['controller'] = $this->getControllerName();
+        }
+        if (null !== $this->getPkIndex()) {
+            $params[$this->getPkIndex()] = $row[$this->getPkIndex()];
+        }
+        if (null !== $this->getParams()) {
+            $params = array_merge($params, $this->getParams());
+        }
+        
 	return $url;
     }
 

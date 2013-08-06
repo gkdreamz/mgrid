@@ -331,7 +331,7 @@ class Pager
      */
     public function getUrl(array $params = array())
     {
-        return $_SERVER['DOCUMENT_URI'];
+        return $_SERVER['SCRIPT_NAME'];
     }
     
     /**

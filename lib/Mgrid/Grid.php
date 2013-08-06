@@ -58,6 +58,11 @@ abstract class Grid
      * @var boolean if the grid should have pager
      */
     protected $hasPager = true;
+    
+    /**
+     * @var boolean defines if should or not show actions for columns
+     */
+    protected $hasActions = false;
 
     /**
      * @var boolean if the grid should have export
@@ -151,7 +156,7 @@ abstract class Grid
     {
         $this->build();
         
-        return $this->twig->render('grid.html.twig', array(
+        return $this->twig->render('grid.twig', array(
                     'grid' => $this,
                     'pager' => $this->pagerHandle,
                         )
@@ -346,7 +351,8 @@ abstract class Grid
         }
 
         $this->actions[] = $action;
-
+        $this->setActions(true);
+        
         return $this;
     }
 
@@ -361,6 +367,7 @@ abstract class Grid
 
     /**
      * returns only actions that attends to self condition
+     * 
      * @param array $row
      * @return array
      */
@@ -368,9 +375,12 @@ abstract class Grid
     {
         $tmpActions = array();
         $actions = $this->getActions();
-        foreach ($actions as $action)
-            if ($action->attendToRowCondition($row))
+        
+        foreach ($actions as $action) {
+            if ($action->attendToRowCondition($row)) {
                 $tmpActions[] = $action;
+            }
+        }
         return $tmpActions;
     }
 
@@ -569,6 +579,27 @@ abstract class Grid
     public function setPager($boolean)
     {
         $this->hasPager = (bool) $boolean;
+        return $this;
+    }
+    
+    /**
+     * Checks if grid has actions
+     * @return boolean 
+     */
+    public function hasActions()
+    {
+        return $this->hasActions;
+    }
+
+    /**
+     * Sets pager for the grid
+     * 
+     * @param string $boolean set actions for columns
+     * @return Mgrid 
+     */
+    public function setActions($boolean)
+    {
+        $this->hasActions = (bool) $boolean;
         return $this;
     }
 
