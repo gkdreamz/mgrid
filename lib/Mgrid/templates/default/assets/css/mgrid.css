@@ -34,7 +34,7 @@
     width: 0;
 }
 
-a.mgrid-pager-icon {
+span.mgrid-pager-icon {
     display: inline-block;
     width: 26px;
     height: 26px;
@@ -47,12 +47,17 @@ select.mgrid-pager-select {
     min-height: 26px;
 }
 
-a.mgrid-pager-previous {
-    background: url('assets/img/icons.png') -248px -283px no-repeat;
+span.mgrid-pager-previous {
+    background: url('../img/icons.png') -248px -283px no-repeat;
 }
 
-a.mgrid-pager-next {
-    background: url('assets/img/icons.png') -188px -283px no-repeat;
+span.mgrid-pager-next {
+    background: url('../img/icons.png') -188px -283px no-repeat;
+}
+
+.mgrid-element-no-active {
+    opacity:0.4;
+    filter:alpha(opacity=40); /* For IE8 and earlier */
 }
 
 /** Mgrid - Export */
@@ -89,7 +94,7 @@ div.mgrid-filter {
     padding: 0;
 }
 .mgrid-table tr.gRowColor td {
-    background: #c9deea;
+    background-color: #c9deea;
 }
 .mgrid-table td {
     border-left: 1px solid #EDFFF9;
@@ -152,7 +157,7 @@ div.mgrid-filter {
     display: block;
     width: 26px;
     height: 26px;
-    background: url('assets/img/icons.png') -308px -163px no-repeat;
+    background: url('../assets/img/icons.png') -308px -163px no-repeat;
 }
 
 .mgrid-table-div-opc-row ul.mgrid-table-div-opc-row-ul-list {
@@ -189,7 +194,7 @@ div.mgrid-filter {
     display: block;
     width: 26px;
     height: 26px;
-    background: url('assets/img/icons.png') -368px -163px;
+    background: url('../img/icons.png') -368px -163px;
     margin-right: 5px;
 }
 .mgrid-table-div-opc-row a.accept span.mgrid-table-div-opc-link-img {

@@ -1,13 +1,17 @@
 <div class="gPager">
     {% if grid.hasPager == true %}
-    {% set leftOff = (pager.getPreviousPage) ? 'mgrid-previous-off' : '' %}
-    {% set rightOff = (pager.getNextPage == pager.getTotalPages) ? 'mgrid-next-off' : '' %}
-        
+    {% set leftOff = (pager.getCurPos == pager.getFirstPage) %}
+    {% set rightOff = (pager.getCurPos == pager.getLastPage) %}
         {% if pager.getTotalPages > 0 %}
         <span>Page </span>
-        <a href="{{ pager.getPreviousUrl }}" class="mgrid-pager-icon mgrid-pager-previous {{ leftOff }}">&gt;</a>
+        
+        {% if leftOff == 0 %}
+        <a href="{{ pager.getPreviousUrl }}"><span class="mgrid-pager-icon mgrid-pager-previous">&lt;</span></a>
+        {% else %}
+        <span class="mgrid-pager-icon mgrid-pager-previous mgrid-element-no-active">&lt;</span>
+        {% endif %}
 
-        <select name="page" class="mgrid-pager-select">
+        <select name="page" id="mgrid-pager-select" class="mgrid-pager-select">
             {% for key in 1..pager.getTotalPages %}
                 {% set url = pager.getCurUrl(key) %}
                 
@@ -20,7 +24,11 @@
             {% endfor %}
         </select>
 
-        <a href="{{ pager.getNextUrl }}" class="mgrid-pager-icon mgrid-pager-next {{ rightOff }}">&gt;</a>
+        {% if rightOff == 0 %}
+        <a href="{{ pager.getNextUrl }}"><span class="mgrid-pager-icon mgrid-pager-next">&gt;</span></a>
+        {% else %}
+        <span class="mgrid-pager-icon mgrid-pager-next mgrid-element-no-active">&gt;</span>
+        {% endif %}
         
         <span> of {{ pager.getTotalPages }} page(s) | </span>
         {% endif %}

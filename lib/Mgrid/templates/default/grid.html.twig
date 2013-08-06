@@ -1,8 +1,3 @@
-    <!-- Stylesheets -->
-    <style type="text/css">
-    {% include '/assets/css/mgrid.css' %}
-    </style>
-
     <form id="mgrid-form" action="http://localhost/test/app/index.php?mgrid[removeOrder]=1" method="get">
 
         <div id="{{grid.getId}}" class="mgrid">
@@ -109,7 +104,7 @@
                     {% endif %}                
                 
                 {% for key, row in grid.getResultSet %}
-                <tr class="mgrid-table-tr-rs {% if (key % 2) %}  gRowColor {% endif %}">
+                <tr class="mgrid-table-tr-rs {% if (key % 2) %}gRowColor{% endif %}">
                     
                     {% if grid.hasMassAction == true %}
                         <td class="gRowCheck"><input type="checkbox" name="mass-id[]" class="massaction-check-opt" value="{{ row[grid.getPkIndex]}}" /></td>
@@ -152,7 +147,8 @@
         </div>
     </form>
 
+    <!-- Stylesheets -->
+    <link rel='stylesheet' href='/test/app/assets/css/mgrid.css' type='text/css' media='all' />
+    
     <!-- Javascript -->
-    <script type="text/javascript">
-    {% include '/assets/js/mgridloader.js' %}
-    </script>
+    <script type='text/javascript' src='/test/app/assets/js/mgridloader.js'></script>
