@@ -102,8 +102,8 @@ class Order
 
         // check columns with sorting
         foreach ($columns as $column) {
-            if ($column->hasOrdering() === null) {
-                $column->setOrdering(true);
+            if ($column->hasOrder() === null) {
+                $column->setOrder(true);
             }
             
             if ($colOrder != $column->getIndex()) {

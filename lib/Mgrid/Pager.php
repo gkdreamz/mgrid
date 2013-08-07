@@ -42,7 +42,7 @@ class Pager
     /**
      * @var integer $maxPerPage Maximum number of itens per page
      */
-    protected $maxPerPage = 25;
+    protected $maxPerPage;
     
     /**
      * pager offset
@@ -79,17 +79,13 @@ class Pager
      * @return boolean
      */
     public function apply()
-    {        
+    {   
         if ($this->getNumRecords() == 0) {
-            $this;
+            return $this;
         }
-        
-        $this->adjustOffset()
-                ->setResultSet(array_slice($this->getResultSet(), $this->getOffset(), $this->getMaxset()));
 
-//$this->getSource()
-//->setLimit($pager->getMaxPerPage())
-//->setOffset($pager->getOffset());
+        $this->adjustOffset();
+        $this->setResultSet(array_slice($this->getResultSet(), $this->getOffset(), $this->getMaxPerPage()));
 
         return $this;
     }
@@ -138,7 +134,7 @@ class Pager
      * @return int maximum number of itens per page
      */
     public function getMaxPerPage()
-    {
+    {        
         return $this->maxPerPage;
     }
 

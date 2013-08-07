@@ -15,7 +15,7 @@
                 </div>
                 {% endif %}
 
-                {% if grid.hasOrdering == true %}
+                {% if grid.hasOrder == true %}
                 <div class="mgrid-order mgrid-control-opt">
                     <button id="mgrid-remove-ordering" type="button"><span>Remove Ordering</span></button>
                 </div>
@@ -62,7 +62,7 @@
                 {% if attribs['caption'] %} <caption>{{ attribs['caption'] }}</caption> {% endif %}
                 
                 <tbody>
-                    {% if grid.hasHeaders == true %}
+                    {% if grid.hasHeader == true %}
                     <tr class="mgrid-table-title">
                         
                         {% if grid.hasActions == true %}
@@ -74,12 +74,12 @@
                         {% endif %}
                             
                         {% for column in grid.getColumns %}
-                            {% if (grid.hasOrdering == true  and column.hasOrdering == true) %}
-                                <td width="{{ column.getWidth }}">
+                            {% if (grid.hasOrder == true  and column.hasOrder == true) %}
+                                <td width="{{ column.getWidth }}" class="{{ column.getAlign }}">
                                     <a href="{{ column.getHref }}" title="{{ column.getLabel }}" class="{{ column.getClass }}"><span>{{ column.getLabel }}</span></a>
                                 </td>
                             {% else %}
-                                <td width="{{ column.getWidth }}"><span>{{ column.getLabel }}</span></td>
+                                <td width="{{ column.getWidth }}" class="{{ column.getAlign }}"><span>{{ column.getLabel }}</span></td>
                             {% endif %}
                         {% endfor %}
                                 
@@ -124,7 +124,7 @@
                                             {% for action in grid.getActionsByRow(row) %}
                                                 {% if action.getCondition(row) == true %}
                                                 <li>
-                                                    <a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
+                                                    <a href="{{ action.getHref(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
                                                         <span class="mgrid-table-div-opc-link-img"></span>{{ action.getLabel }}
                                                     </a>
                                                 </li>
@@ -138,7 +138,7 @@
                     {% endif %}
                     
                     {% for column in grid.getColumns %}
-                        <td>{{ column.getRender(row).render }}</td>
+                        <td class="{{ column.getAlign }}">{{ column.getRender(row).render }}</td>
                     {% endfor %}
                         
                 </tr>

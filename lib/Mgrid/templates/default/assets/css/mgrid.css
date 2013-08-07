@@ -86,6 +86,7 @@ div.mgrid-filter {
 }
 
 /* Mgrid - Table */
+
 .mgrid-table {
     width: 100%;
     margin-bottom: 5px;
@@ -218,6 +219,18 @@ span.mgrid-table-tr-opc-icon {
 }
 .mgrid-table-div-opc-row a.pdf span.mgrid-table-div-opc-link-img {
     background-position: -338px -133px;
+}
+
+.mgrid-align-left {
+    text-align: left;
+}
+
+.mgrid-align-right {
+    text-align: right;
+}
+
+.mgrid-align-center {
+    text-align: center;
 }
 
 /* Mass Action */

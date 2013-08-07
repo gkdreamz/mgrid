@@ -46,7 +46,7 @@ class Column
      * if the column should order results
      * @var boolean 
      */
-    protected $hasOrdering = null;
+    protected $hasOrder = null;
 
     /**
      * main datasource index used by column
@@ -85,10 +85,10 @@ class Column
     protected $class = 'sort';
 
     /**
-     * Align the values of the field: L-Left | C-Center | R-Right
+     * Align the values of the field: left|center|right
      * @var string 
      */
-    protected $align = 'L';
+    protected $align = 'left';
 
     /**
      * Defines whether the column has total
@@ -109,34 +109,7 @@ class Column
      */
     public function __construct(array $options = array())
     {
-        $this->setOptions($options);
-        return $this;
-    }
-
-    /**
-     * Set column state from options array
-     *
-     * @param  array $options
-     * @return Grid
-     */
-    public function setOptions(array $options)
-    {
-
-        foreach ($options as $key => $value) {
-
-            $method = 'set' . ucfirst($key);
-
-            //forbiden options
-            if (in_array($method, array()))
-                if (!is_object($value))
-                    continue;
-
-            if (!method_exists($this, $method)) {
-                throw new \Mgrid\Exception("Unknown option {$method}");
-            }
-            
-            $this->$method($value);
-        }
+        \Mgrid\Stdlib\Configurator::configure($this, $options);
         return $this;
     }
 
@@ -145,9 +118,9 @@ class Column
      * @param bool $value
      * @return Column|bool 
      */
-    public function hasOrdering()
+    public function hasOrder()
     {
-        return $this->hasOrdering;
+        return $this->hasOrder;
     }
 
     /**
@@ -264,13 +237,13 @@ class Column
      * Sets if the grid uses ordering
      * @return Column
      */
-    public function setOrdering($hasOrdering)
+    public function setOrder($hasOrder)
     {
-        $this->hasOrdering = (bool) $hasOrdering;
+        $this->hasOrder = (bool) $hasOrder;
         return $this;
     }
 
-    public function getOrdering()
+    public function getOrder()
     {
         return $this;
     }
@@ -367,28 +340,11 @@ class Column
 
     /**
      * Returns the align value
-     * @param boolean $abbreviated
-     * @return string 
+     * @return string
      */
-    public function getAlign($abbreviated = true)
+    public function getAlign()
     {
-        if (!$abbreviated) {
-            switch ($this->align) {
-                case 'L':
-                    return 'left';
-                    break;
-                case 'C':
-                    return 'center';
-                    break;
-                case 'R':
-                    return 'right';
-                    break;
-                default:
-                    return '';
-                    break;
-            }
-        }
-        return $this->align;
+        return 'mgrid-align-' . $this->align;
     }
 
     /**

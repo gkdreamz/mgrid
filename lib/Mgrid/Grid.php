@@ -47,17 +47,22 @@ abstract class Grid
     /**
      * @var boolean it is set by the columns when at least one of them has filter
      */
-    protected $hasFilter = false;
+    protected $hasFilter;
 
     /**
      * @var boolean if the grid should order results, by default yes
      */
-    protected $hasOrdering = true;
+    protected $hasOrder;
 
     /**
      * @var boolean if the grid should have pager
      */
-    protected $hasPager = true;
+    protected $hasPager;
+
+    /**
+     * @var boolean if the grid should have table headers
+     */
+    protected $hasHeader;
     
     /**
      * @var boolean defines if should or not show actions for columns
@@ -73,11 +78,6 @@ abstract class Grid
      * @var boolean if the grid should have mass actions
      */
     protected $hasMassAction;
-
-    /**
-     * @var boolean if the grid should have table headers
-     */
-    protected $hasHeaders = true;
 
     /**
      * @var array  
@@ -124,7 +124,7 @@ abstract class Grid
      * Load the basic configuration
      */
     public function __construct()
-    {
+    {       
         $loader = new \Twig_Loader_Filesystem(__DIR__ . '/templates/default/');
 
         // load twig
@@ -141,12 +141,33 @@ abstract class Grid
 
         // set pager handle
         $this->pagerHandle = new \Mgrid\Pager;
+        
+        // load default settings
+        $this->loadSettings();
 
         // set request
         $this->setRequest($_REQUEST);
 
         // run init
         $this->init();
+    }
+    
+    /**
+     * 
+     */
+    private function loadSettings()
+    {
+        // grid
+        \Mgrid\Stdlib\Configurator::configure($this, \Mgrid\Config::getConfig('grid'));
+        
+        // pager
+        $config = \Mgrid\Config::getConfig('pager');
+        
+        if(!isset($config['recordsPerPage'])) {
+            throw new \Mgrid\Exception('There is no settings for number of records per page');
+        }
+        
+        $this->pagerHandle->setMaxPerPage($config['recordsPerPage']);
     }
 
     /**
@@ -261,7 +282,7 @@ abstract class Grid
      */
     private function processOrder()
     {
-        if (!$this->hasOrdering()) {
+        if (!$this->hasOrder()) {
             return $this;
         }
 
@@ -543,9 +564,9 @@ abstract class Grid
      * Checks if grid has ordering
      * @return boolean
      */
-    public function hasOrdering()
+    public function hasOrder()
     {
-        return $this->hasOrdering;
+        return $this->hasOrder;
     }
 
     /**
@@ -554,9 +575,9 @@ abstract class Grid
      * @param string $boolean String with an index column
      * @return Mgrid 
      */
-    public function setOrdering($boolean)
+    public function setOrder($boolean)
     {
-        $this->hasOrdering = (bool) $boolean;
+        $this->hasOrder = (bool) $boolean;
         return $this;
     }
 
@@ -626,13 +647,13 @@ abstract class Grid
     }
 
     /**
-     * Checks if grid has table Headers
+     * Checks if grid has table Header
      * @return boolean 
      */
-    public function hasHeaders()
+    public function hasHeader()
     {
         //return ($this->hasPager && $this->pagerHandle->hasPager());
-        return $this->hasHeaders;
+        return $this->hasHeader;
     }
 
     /**
@@ -641,9 +662,9 @@ abstract class Grid
      * @param string $boolean String with an index column
      * @return Mgrid 
      */
-    public function setHeaders($boolean)
+    public function setHeader($boolean)
     {
-        $this->hasHeaders = (bool) $boolean;
+        $this->hasHeader = (bool) $boolean;
         return $this;
     }
 

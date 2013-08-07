@@ -21,12 +21,11 @@
 namespace Mgrid;
 
 /**
- * Set number of records por pag
+ * Set the actions for the records
  * 
  * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
-
 class Action
 {
 
@@ -35,47 +34,40 @@ class Action
      * @var string
      */
     protected $label;
+
     /**
-     * the name of the action used on the url
+     * the target for the link
      * @var string
      */
-    protected $actionName;
+    protected $href;
+
     /**
-     * the name of the controller used on the url
+     * the params for the action
      * @var string
      */
-    protected $controllerName;
-    /**
-     * the actions params url by url
-     * @var string
-     */
-    protected $params;
-    /**
-     * the static url string defined by user
-     * @var string
-     */
-    protected $userDefinedUrl;
+    protected $params = array();
+
     /**
      * sets the condition the to action attend
      * @var string
      */
     protected $condition;
-    /**
-     * the row index that contain the PK of the record
-     * @var mixed
-     */
-    protected $pkIndex;
+
     /**
      * the css class use by link of the action
      * @var type 
      */
     protected $cssClass;
+
     /**
      * html title to the action
      * @var type 
      */
     protected $title;
     
+    /**
+     * @var type 
+     */
     protected $target = '_parent';
 
     /**
@@ -85,8 +77,8 @@ class Action
      */
     public function __construct(array $options = array())
     {
-	\Mgrid\Stdlib\Configurator::configure($this, $options);
-	return $this;
+        \Mgrid\Stdlib\Configurator::configure($this, $options);
+        return $this;
     }
 
     /**
@@ -95,22 +87,24 @@ class Action
      */
     public function getLabel()
     {
-	return (string) $this->label;
+        return (string) $this->label;
     }
 
     /**
      * Sets the label
+     * 
      * @param string $label
      * @return Column 
      */
     public function setLabel($label)
     {
-	$this->label = (string) $label;
-        
-        if(!$this->getTitle())
+        $this->label = (string) $label;
+
+        if (!$this->getTitle()) {
             $this->title = (string) $label;
-        
-	return $this;
+        }
+
+        return $this;
     }
 
     /**
@@ -118,59 +112,25 @@ class Action
      * @param string $url
      * @return Action 
      */
-    public function setUserDefinedUrl($url)
+    public function setHref($href)
     {
-	$this->userDefinedUrl = (string) $url;
-	return $this;
+        $this->href = (string) $href;
+        return $this;
     }
 
     /**
      * returns the user defined url
      * @return string
      */
-    public function getUserDefinedUrl()
+    public function getHref()
     {
-	return null;
-    }
-
-    /**
-     * sets the action name
-     * @param string $actionName
-     * @return Action 
-     */
-    public function setActionName($actionName)
-    {
-	$this->actionName = (string) $actionName;
-	return $this;
-    }
-
-    /**
-     * returns the action name
-     * @return string
-     */
-    public function getActionName()
-    {
-	return $this->actionName;
-    }
-
-    /**
-     * sets the controller name
-     * @param type $controllerName
-     * @return Action 
-     */
-    public function setControllerName($controllerName)
-    {
-	$this->controllerName = (string) $controllerName;
-	return $this;
-    }
-
-    /**
-     * returns the controller name
-     * @return type 
-     */
-    public function getControllerName()
-    {
-	return $this->controllerName;
+        $url = $this->href;
+        
+        foreach($this->getParams() as $key => $value) {
+            $url .= '&' . $key . '=' . $value;
+        }
+        
+        return $url;
     }
 
     /**
@@ -179,7 +139,7 @@ class Action
      */
     public function getParams()
     {
-	return $this->params;
+        return $this->params;
     }
 
     /**
@@ -187,10 +147,10 @@ class Action
      * @param type $params
      * @return Action 
      */
-    public function setParams(array $params)
+    public function setParams(array $params = array())
     {
-	$this->params = $params;
-	return $this;
+        $this->params = $params;
+        return $this;
     }
 
     /**
@@ -199,9 +159,9 @@ class Action
      */
     public function getCondition($row)
     {
-	$cond = $this->condition;
-        
-	return ($cond != null) ? call_user_func($cond, $row) : true;
+        $cond = $this->condition;
+
+        return ($cond != null) ? call_user_func($cond, $row) : true;
     }
 
     /**
@@ -211,28 +171,8 @@ class Action
      */
     public function setCondition($condition)
     {
-	$this->condition = $condition;
-	return $this;
-    }
-
-    /**
-     * returns the PK Index
-     * @return mixed
-     */
-    public function getPkIndex()
-    {
-	return $this->pkIndex;
-    }
-
-    /**
-     * the PK index of the row
-     * @param mixed $pkIndex
-     * @return Action 
-     */
-    public function setPkIndex($pkIndex)
-    {
-	$this->pkIndex = $pkIndex;
-	return $this;
+        $this->condition = $condition;
+        return $this;
     }
 
     /**
@@ -241,7 +181,7 @@ class Action
      */
     public function getCssClass()
     {
-	return $this->cssClass;
+        return $this->cssClass;
     }
 
     /**
@@ -250,7 +190,7 @@ class Action
      */
     public function setCssClass($cssClass)
     {
-	$this->cssClass = (string) $cssClass;
+        $this->cssClass = (string) $cssClass;
     }
 
     /**
@@ -260,60 +200,37 @@ class Action
      */
     public function attendToRowCondition(array $row)
     {
-	$this->getCondition($row);
-        
-	return true;
+        $this->getCondition($row);
+
+        return true;
     }
 
     /**
-     * returns the url string based on a row
      * 
-     * @param array $row
      * @return string
      */
-    public function getUrl(array $row)
-    {
-	$params = array();
-        $url = '';
-
-	if (null !== $this->getUserDefinedUrl()) {
-	    return $this->getUserDefinedUrl();
-	} 
-	    
-        if (null !== $this->getActionName()) {
-            $params['action'] = $this->getActionName();
-        }
-
-        if (null !== $this->getControllerName()) {
-            $params['controller'] = $this->getControllerName();
-        }
-        if (null !== $this->getPkIndex()) {
-            $params[$this->getPkIndex()] = $row[$this->getPkIndex()];
-        }
-        if (null !== $this->getParams()) {
-            $params = array_merge($params, $this->getParams());
-        }
-        
-	return $url;
-    }
-
     public function getTitle()
     {
-	return $this->title;
+        return $this->title;
     }
 
+    /**
+     * 
+     * @param string $title
+     */
     public function setTitle($title)
     {
-	$this->title = $title;
+        $this->title = $title;
     }
 
     public function getTarget()
     {
-	return $this->target;
+        return $this->target;
     }
 
     public function setTarget($target)
     {
-	$this->target = $target;
+        $this->target = $target;
     }
+
 }
