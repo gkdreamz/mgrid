@@ -23,13 +23,12 @@ namespace Mgrid\Column\Render;
 use Mgrid\Column\Render;
 
 /**
- * Default render
+ * Handle Columns
  * 
  * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
-
-class Text extends Render\ARender implements Render\IRender
+class EnableOrDisabled extends Render\ARender implements Render\IRender
 {
 
     /**
@@ -40,8 +39,8 @@ class Text extends Render\ARender implements Render\IRender
     {
         $row = $this->getRow();
         $index = $this->getColumn()->getIndex();
-        
-        return $this->output($row[$index]);
+
+        return (($row[$index] == 'Y') || ($row[$index] == 1)) ? 'Enable' : 'Disabled';
     }
 
 }

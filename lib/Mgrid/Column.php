@@ -142,8 +142,9 @@ class Column
             
             $type = ucfirst($render['type']);
             $className = "\Mgrid\Column\Render\\{$type}";
-            $options = isset($render['options']) ? $render['options'] : array();
-            $render = new $className($options);
+            unset($render['type']);
+            
+            $render = new $className($render);
                 
         } elseif (is_object($render) && $render instanceof \Mgrid\Column\Render\IRender) {
             $render = $render;
@@ -335,6 +336,7 @@ class Column
         }
 
         $render->setRow($row);
+        
         return $render;
     }
 

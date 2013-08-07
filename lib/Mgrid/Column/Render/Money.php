@@ -25,9 +25,10 @@ use Mgrid\Column\Render;
 /**
  * Handle Columns
  * 
- * @since       0.0.2
+ * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
+
 class Money extends Render\ARender implements Render\IRender
 {
 
@@ -37,11 +38,21 @@ class Money extends Render\ARender implements Render\IRender
      */
     public function render()
     {
-//        $currency = new \Zend_Currency();
         $row = $this->getRow();
         $index = $this->getColumn()->getIndex();
-//        return $currency->toCurrency($row[$index]);
-        return $row[$index];
+        
+        $config = \Mgrid\Config::getConfig('render');
+
+        // output
+        $prefix = $config['currency.output.prefix'];
+        $suffix = $config['currency.output.suffix'];
+        $decimals = $config['currency.output.decimals'];
+        $dec_point = $config['currency.output.dec_point'];
+        $thousands_sep = $config['currency.output.thousands_sep'];
+        
+        $output = $prefix . number_format($row[$index], $decimals, $dec_point, $thousands_sep) . $suffix;
+
+        return $output;
     }
 
 }

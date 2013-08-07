@@ -323,8 +323,9 @@ abstract class Grid
         if (is_array($column)) {
             $options = $column;
 
-            if (null === $options['index'])
-                throw new Grid\Exception('Columns specified by array must have an accompanying index');
+            if (null === $options['index']) {
+                throw new \Mgrid\Exception('Columns specified by array must have an accompanying index');
+            }
 
             $this->columns[] = $this->createColumn($options);
         } elseif ($column instanceof \Mgrid\Column) {
