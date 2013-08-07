@@ -31,16 +31,6 @@ class Number
 {
 
     /**
-     *
-     * @param float $val
-     * @return integer 
-     */
-    public function toInt($float)
-    {
-        return (int) preg_replace('[\D]', '', $float);
-    }
-
-    /**
      * Returns any value in decimal e.g. 824169.02
      * @param string $value
      * @param type $precision

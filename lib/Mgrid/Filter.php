@@ -43,14 +43,14 @@ class Filter
      */
     public function addFilter($key, $value)
     {
-        $myfn = function($key, $value) use (&$myfn) {
+        $myfilter = function($key, $value) use (&$myfilter) {
                     if (is_array($key)) {
-                        return (count($key) > 0) ? array($key[0] => $myfn(array_slice($key, 1), $value)) : $value;
+                        return (count($key) > 0) ? array($key[0] => $myfilter(array_slice($key, 1), $value)) : $value;
                     }
                     return array($key => $value);
                 };
 
-        $this->filters = array_merge($this->filters, $myfn($key, $value));
+        $this->filters = array_merge($this->filters, $myfilter($key, $value));
 
         return $this;
     }
@@ -73,7 +73,7 @@ class Filter
      */
     public function apply(array $columns, array $resultSet)
     {
-        $dateConverter = new \Mgrid\Filter\Converter\Date;
+        $config = \Mgrid\Config::getConfig('render');
 
         $filters = $this->getFilters();
 
@@ -84,122 +84,126 @@ class Filter
 
         $resultSetFiltered = array();
 
-        //loop nos resultados
         foreach ($resultSet as $key => $row) {
             $bln_filter = true;
 
             foreach ($columns as $column) {
-                //pego filtro
+
                 $objFilter = $column->getFilter();
 
-                //caso n tenha filtro para a coluna ignoro
+                // no filter to the column
                 if (!$objFilter) {
-                    continue;
+                    continue 1;
                 }
 
+                // render
                 $objRender = $objFilter->getRender();
-
-                //pego informacoes 
                 $range = $objRender->getRange();
                 $conditions = $objRender->getCondition();
 
-                // guardar valores padroes dos campos
+                // save default values into the fields
                 if ($range) {
-                    //loop nos filtros
-                    foreach ($filters as $keyCond => $fieldFilter) {
-                        //nenhum elemento em array enviado
-                        if (!is_array($fieldFilter))
-                            continue;
 
-                        // loop nos campos do tipo do filtro
+                    // filters check
+                    foreach ($filters as $keyCond => $fieldFilter) {
+
+                        if (!is_array($fieldFilter)) {
+                            continue 1;
+                        }
+
+                        // loop fields with filter
                         foreach ($fieldFilter as $field => $value) {
+
                             foreach ($conditions['range'] as $typeCond => $condition)
-                            // caso filtro com mesmo nome da coluna
+
+                            // filter with same name as column
                                 if (($field == $column->getIndex()) && ($keyCond == $typeCond)) {
                                     $column->getFilter()->getRender()->setAttributeValue("value[{$typeCond}]", $value);
                                 }
                         }
                     }
                 } else {
-                    //loop nos filtros
-                    foreach ($filters as $filter => $value)
-                    //caso filtro com mesmo nome da coluna
-                        if ($filter == $column->getIndex()) {
-                            //populo valor padrao
-                            $column->getFilter()->getRender()->setAttributeValue('value', $value);
+                    
+                    foreach ($filters as $filter => $value) {
+
+                        // matching filter e column
+                        if ($filter != $column->getIndex()) {
+                            continue 1;
                         }
+
+                        // set default value
+                        $column->getFilter()
+                                ->getRender()
+                                ->setAttributeValue('value', $value);
+                    }
                 }
 
-                // caso ja setado como falso ignoro 
+                
                 if (!$bln_filter) {
-                    continue;
+                    continue 1;
                 }
 
-                // dentro de um range
+                // It's not nice, I know!! Too tired to work on that right now =)
                 if ($range) {
-                    //loop nos filtros
+
                     foreach ($filters as $keyCond => $fieldFilter) {
-                        //nenhum elemento em array enviado
+
                         if (!is_array($fieldFilter)) {
                             continue;
                         }
 
-                        // loop nos campos do tipo do filtro
                         foreach ($fieldFilter as $field => $value) {
-                            // caso filtro n tenha valor nem comparo
+
                             if (empty($value)) {
-                                continue;
+                                continue 1;
                             }
 
                             foreach ($conditions['range'] as $typeCond => $condition) {
-                                // caso ja setado como falso ignoro 
+
                                 if (!$bln_filter) {
-                                    continue;
+                                    continue 1;
                                 }
 
-                                // caso tipo de condicao diferente da condicao do range nao comparo
+                                // case type condition and range different
                                 if ($keyCond != $typeCond) {
-                                    continue;
+                                    continue 1;
                                 }
 
-                                // caso filtro com mesmo nome da coluna
-                                if ($field == $column->getIndex()) {
-                                    //valor da linha
-                                    $rowValue = $row[$field];
-
-                                    //tratamento quando sao tipo date
-                                    if (is_object($rowValue)) {
-                                        if (get_class($rowValue) == 'DateTime') {
-                                            $rowValue = $rowValue->format('Ymd');
-                                            $value = $dateConverter->fromBRtoNumber($value);
-                                        }
-                                    }
-
-                                    $bln_filter = $this->gridFiltersConditions($condition, $rowValue, $value);
+                                // matching field and filter
+                                if ($field != $column->getIndex()) {
+                                    continue 1;
                                 }
+
+                                $rowValue = $row[$field];
+                                
+                                // datetime case
+                                if ($column->getRender($row) instanceof \Mgrid\Column\Render\Date) {
+                                    $dateTime = \DateTime::createFromFormat($config['date.format.to'], $value);
+                                    $value = $dateTime->format($config['date.format.from']);
+                                }
+                                
+                                // check if has filter
+                                $bln_filter = $this->gridFiltersConditions($condition, $rowValue, $value);
                             }
                         }
                     }
-                    // valor especifico
                 } else {
-                    //loop nos filtros
+                    
                     foreach ($filters as $filter => $value) {
-                        //elemento em array enviado
-                        if (is_array($value))
-                            continue;
+                        
+                        if (is_array($value)) {
+                            continue 1;
+                        }
 
-                        //caso filtro com mesmo nome da coluna
+                        // matching field and filter
                         if ($filter == $column->getIndex()) {
 
-                            //valor da linha
                             $rowValue = $row[$filter];
-
-                            //tratamento quando sao tipo date
-                            if (is_object($rowValue)) {
-                                if (get_class($rowValue) == 'DateTime') {
-                                    $rowValue = $rowValue->format('Ymd');
-                                    $value = $dateConverter->fromBRtoNumber($value);
-                                }
+                            
+                            // datetime case
+                            if ($column->getRender($row) instanceof \Mgrid\Column\Render\Date) {
+                                $dateTime = \DateTime::createFromFormat($config['date.format.to'], $value);
+                                $value = $dateTime->format($config['date.format.from']);
                             }
 
                             foreach ($conditions['match'] as $condition) {
@@ -210,7 +214,7 @@ class Filter
                 }
             }
 
-            //posso adicionar
+            // add to the grid
             if ($bln_filter) {
                 array_push($resultSetFiltered, $row);
             }
@@ -229,34 +233,28 @@ class Filter
      */
     private function gridFiltersConditions($condition, $fieldVal, $filterVal)
     {
-
-        $numberConverter = new \Mgrid\Filter\Converter\Number;
-
-
         switch ($condition) {
             case '>=':
-                if ($numberConverter->toInt($fieldVal) >= $numberConverter->toInt($filterVal))
+                if ($fieldVal >= $filterVal)
                     return true;
                 break;
             case '<=':
-                if ($numberConverter->toInt($fieldVal) <= $numberConverter->toInt($filterVal))
+                if ($fieldVal <= $filterVal)
                     return true;
                 break;
             case '>':
-                if ($numberConverter->toInt($fieldVal) > $numberConverter->toInt($filterVal))
+                if ($fieldVal > $filterVal)
                     return true;
                 break;
             case '<':
-                if ($numberConverter->toInt($fieldVal) < $numberConverter->toInt($filterVal))
+                if ($fieldVal < $filterVal)
                     return true;
                 break;
             case 'fulltext':
-                //procuro pela palavra no em qlqr posicao da string
                 if (stristr($fieldVal, $filterVal))
                     return true;
                 break;
             case '=':
-                //procuro pela palavra exatamente igual
                 if ($fieldVal == $filterVal)
                     return true;
                 break;

@@ -27,6 +27,7 @@ namespace Mgrid\Column\Render;
  * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
+
 abstract class ARender implements IRender
 {
 
@@ -46,11 +47,6 @@ abstract class ARender implements IRender
      * @var Mgrid\Column
      */
     protected $column = null;
-
-    /**
-     * render options
-     */
-    protected $options;
     
     /**
      * @var string 

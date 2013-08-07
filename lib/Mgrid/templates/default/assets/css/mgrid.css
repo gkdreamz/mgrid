@@ -96,6 +96,11 @@ div.mgrid-filter {
     padding: 0;
     margin: 0;
 }
+
+.mgrid-table tr.mgrid-table-tr-rs:hover td {
+    background-color: #f2d4b0;
+}
+
 tr.mgrid-table-tr-rs-color td {
     background-color: #c9deea;
 }
