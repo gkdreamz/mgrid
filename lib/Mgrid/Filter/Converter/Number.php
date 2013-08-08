@@ -18,57 +18,51 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Column\Render;
-
-use Mgrid\Column\Render;
+namespace Mgrid\Filter\Converter;
 
 /**
- * Creates a link for the field
+ * Handle the numeric filters
  * 
- * @since       0.0.1
+ * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
 
-class Link extends Render\ARender implements Render\IRender
+class Number
 {
-    /**
-     *
-     * @var string 
-     */
-    protected $href;
 
     /**
-     *
-     * @return string
+     * Returns any value in decimal e.g. 824169.02
+     * @param string $value
+     * @param type $precision
+     * @return decimal  
      */
-    public function render()
+    public function toDecimal($value, $precision = 2)
     {
-        $row = $this->getRow();
-        $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
+
+        $factor = (strpos($value, '-')) ? - 1 : 1;
+
+        // caso contenha uma virgula e um ou mais pontos
+        if (substr_count($value, ',') == 1 && substr_count($value, '.') != 0) {
+            $value = str_replace('.', '', $value);
+            $value = str_replace(',', '.', $value);
+        }
+        // caso uma virgula e nenhum ponto
+        if (substr_count($value, ',') == 1 && substr_count($value, '.') == 0) {
+            $value = str_replace(',', '.', $value);
+        }
+
+        return number_format(($value * $factor), $precision, '.', '');
     }
 
     /**
-     * 
-     * @param string $href
+     * Returns any value in money e.g. 82.169,02
+     * @param string $value
+     * @param type $precision
+     * @return money
      */
-    public function setHref($href)
+    public function toMoney($value, $precision = 2)
     {
-        $this->href = $href;
+        return number_format($value, $precision, ',', '.');
     }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
-    }
+
 }
-

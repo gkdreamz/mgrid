@@ -1,29 +1,86 @@
 <?php
-
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information, see
+ * <http://mgrid.mdnsolutions.com/license>.
+ */
 namespace Mgrid\Source;
 
 use Mgrid\Source;
 
-class ArraySource extends Source\ASource implements Source\ISource
+/**
+ * Provides you the ability to use PHP Arrays as a source
+ *
+ * @since       0.0.2
+ * @author      Renato Medina <medinadato@gmail.com>
+ */
+
+class ArraySource extends Source\SourceAbstract implements Source\SourceInterface
 {
 
+    /**
+     * @var type 
+     */
     protected $eventDispatcher;
-
+    /**
+     * @var type 
+     */
     protected $fields;
+    /**
+     * @var type 
+     */
     protected $rawResult;
+    /**
+     * @var type 
+     */
     protected $offset = 0;
+    /**
+     * @var type 
+     */
     protected $start;
+    /**
+     * @var type 
+     */
     protected $numResults = 0;
+    /**
+     * @var type 
+     */
     protected $sourceName;
+    /**
+     * @var type 
+     */
     protected $cache;
+    /**
+     * @var type 
+     */
     protected $primaryKey = null;
 
+    /**
+     * 
+     * @param array $array
+     */
     public function __construct(array $array)
     {
         $this->rawResult = $array;
         $this->sourceName = 'array';
     }
     
+    /**
+     * 
+     * @return type
+     */
     public function count()
     {
 	$numResults = count($this->rawResult);
@@ -31,16 +88,29 @@ class ArraySource extends Source\ASource implements Source\ISource
 	return $numResults;
     }
 
+    /**
+     * 
+     * @param type $value
+     * @return type
+     */
     public function quoteValue($value)
     {
         return $value;
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function resetOrder()
     {
         return true;
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function resetLimit()
     {
         return true;
@@ -126,9 +196,9 @@ class ArraySource extends Source\ASource implements Source\ISource
 
     public function execute()
     {
-        $result = $this->_cleanQueryResults($this->rawResult);
+        return $this->_cleanQueryResults($this->rawResult);
         
-        return array_slice($result, $this->offset, 25);
+//        return array_slice($result, $this->offset, 25);
     }
     
     /**

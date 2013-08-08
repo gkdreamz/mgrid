@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -18,57 +17,19 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Column\Render;
-
-use Mgrid\Column\Render;
+namespace Mgrid;
 
 /**
- * Creates a link for the field
- * 
- * @since       0.0.1
+ * Abstract class to generate the grid components
+ *
+ * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
-
-class Link extends Render\ARender implements Render\IRender
+interface GridInterface
 {
     /**
-     *
-     * @var string 
+     * Build the grid and its configurations
      */
-    protected $href;
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $row = $this->getRow();
-        $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
-    }
-
-    /**
-     * 
-     * @param string $href
-     */
-    public function setHref($href)
-    {
-        $this->href = $href;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
-    }
+     function init();
 }
 

@@ -1,28 +1,62 @@
 <?php
+
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information, see
+ * <http://mgrid.mdnsolutions.com/license>.
+ */
+
 namespace Mgrid\Column\Render;
 
 /**
- * Description of ARender
+ * Abstract class for Filter renders
  *
- * @author Renato Medina <medinadato@gmail.com>
+ * 
+ * @since       0.0.1
+ * @author      Renato Medina <medinadato@gmail.com>
  */
+
 abstract class ARender implements IRender
 {
+
+    /**
+     * @var array 
+     */
+    protected $config;
 
     /**
      * row used by render
      * @var array
      */
     protected $row = array();
+
     /**
      * Column that uses the render
      * @var Mgrid\Column
      */
     protected $column = null;
+    
     /**
-     * render options
+     * @var string 
      */
-    protected $options;
+    protected $prefix;
+    
+    /**
+     * @var string 
+     */
+    protected $suffix;
 
     /**
      * constructor may set options
@@ -30,8 +64,8 @@ abstract class ARender implements IRender
      */
     public function __construct(array $options = array())
     {
-	if (isset($options))
-	    $this->options = $options;
+        \Mgrid\Stdlib\Configurator::configure($this, $options);
+        return $this;
     }
 
     /**
@@ -41,8 +75,8 @@ abstract class ARender implements IRender
      */
     public function setRow(array $row)
     {
-	$this->row = $row;
-	return $this;
+        $this->row = $row;
+        return $this;
     }
 
     /**
@@ -51,7 +85,7 @@ abstract class ARender implements IRender
      */
     public function getRow()
     {
-	return $this->row;
+        return $this->row;
     }
 
     /**
@@ -59,7 +93,7 @@ abstract class ARender implements IRender
      */
     public function getColumn()
     {
-	return $this->column;
+        return $this->column;
     }
 
     /**
@@ -69,18 +103,53 @@ abstract class ARender implements IRender
      */
     public function setColumn(\Mgrid\Column $column)
     {
-	$this->column = $column;
-	return $this;
+        $this->column = $column;
+        return $this;
     }
-
+    
     /**
-     *
-     * @return type 
+     * @return string
      */
-    public function getView()
+    public function getPrefix()
     {
-	//get view
-	$viewRenderer = \Zend_Controller_Action_HelperBroker::getExistingHelper('ViewRenderer');
-	return $viewRenderer->view;        
+        return $this->prefix;
+    }
+    
+    /**
+     * @param string $prefix
+     * @return \Mgrid\Column\Render\ARender
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+    
+    /**
+     * @param string $suffix
+     * @return \Mgrid\Column\Render\ARender
+     */
+    public function setSuffix($suffix)
+    {
+        $this->suffix = $suffix;
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param string $output
+     * @return string
+     */
+    protected function output($output)
+    {
+        return $this->getPrefix() . $output . $this->getSuffix();
     }
 }

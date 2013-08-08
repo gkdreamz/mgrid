@@ -1,11 +1,30 @@
 <?php
 
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information, see
+ * <http://mgrid.mdnsolutions.com/license>.
+ */
+
 namespace Mgrid;
 
 /**
- * Description of Column
- *
- * @author Renato Medina <medinadato@gmail.com>
+ * Set the actions for the records
+ * 
+ * @since       0.0.1
+ * @author      Renato Medina <medinadato@gmail.com>
  */
 class Action
 {
@@ -15,47 +34,46 @@ class Action
      * @var string
      */
     protected $label;
+
     /**
-     * the name of the action used on the url
+     * the target for the link
      * @var string
      */
-    protected $actionName;
+    protected $href;
+    
     /**
-     * the name of the controller used on the url
+     * the keys from the source for the action
      * @var string
      */
-    protected $controllerName;
+    protected $keys = array();
+
     /**
-     * the actions params url by url
+     * the user params for the action
      * @var string
      */
-    protected $params;
-    /**
-     * the static url string defined by user
-     * @var string
-     */
-    protected $userDefinedUrl;
+    protected $params = array();
+
     /**
      * sets the condition the to action attend
      * @var string
      */
     protected $condition;
-    /**
-     * the row index that contain the PK of the record
-     * @var mixed
-     */
-    protected $pkIndex;
+
     /**
      * the css class use by link of the action
      * @var type 
      */
     protected $cssClass;
+
     /**
      * html title to the action
      * @var type 
      */
     protected $title;
     
+    /**
+     * @var type 
+     */
     protected $target = '_parent';
 
     /**
@@ -65,8 +83,8 @@ class Action
      */
     public function __construct(array $options = array())
     {
-	\Mgrid\Stdlib\Configurator::configure($this, $options);
-	return $this;
+        \Mgrid\Stdlib\Configurator::configure($this, $options);
+        return $this;
     }
 
     /**
@@ -75,22 +93,24 @@ class Action
      */
     public function getLabel()
     {
-	return (string) $this->label;
+        return (string) $this->label;
     }
 
     /**
      * Sets the label
+     * 
      * @param string $label
      * @return Column 
      */
     public function setLabel($label)
     {
-	$this->label = (string) $label;
-        
-        if(!$this->getTitle())
+        $this->label = (string) $label;
+
+        if (!$this->getTitle()) {
             $this->title = (string) $label;
-        
-	return $this;
+        }
+
+        return $this;
     }
 
     /**
@@ -98,59 +118,65 @@ class Action
      * @param string $url
      * @return Action 
      */
-    public function setUserDefinedUrl($url)
+    public function setHref($href)
     {
-	$this->userDefinedUrl = (string) $url;
-	return $this;
+        $this->href = (string) $href;
+        return $this;
     }
 
     /**
-     * returns the user defined url
+     * returns the user defined href
      * @return string
      */
-    public function getUserDefinedUrl()
+    public function getHref()
     {
-	return null;
+        return $this->href;
     }
-
+    
     /**
-     * sets the action name
-     * @param string $actionName
-     * @return Action 
-     */
-    public function setActionName($actionName)
-    {
-	$this->actionName = (string) $actionName;
-	return $this;
-    }
-
-    /**
-     * returns the action name
+     * Returns the treated url based in the user prefs
+     * 
+     * @param array $row
      * @return string
      */
-    public function getActionName()
+    public function getUrl(array $row = array())
     {
-	return $this->actionName;
-    }
+        // user data
+        $user_url = $this->getHref();
+        $user_defined_params = $this->getParams();
+        $user_keys = $this->getKeys();
+        $user_url_params = array();
+        // slice url
+        $user_url_pieces = parse_url($user_url);
 
-    /**
-     * sets the controller name
-     * @param type $controllerName
-     * @return Action 
-     */
-    public function setControllerName($controllerName)
-    {
-	$this->controllerName = (string) $controllerName;
-	return $this;
-    }
+        // create host/path
+        $host = isset($user_url_pieces['host']) ? $user_url_pieces['host'] : '';
+        $path = isset($user_url_pieces['path']) ? $user_url_pieces['path'] : '';
 
-    /**
-     * returns the controller name
-     * @return type 
-     */
-    public function getControllerName()
-    {
-	return $this->controllerName;
+        // create array out of url params
+        if(isset($user_url_pieces['query'])) {
+            parse_str($user_url_pieces['query'], $user_url_params);
+        }
+               
+        foreach($user_keys as $key => $value) {
+            if(!isset($row[$value])) {
+                continue 1;
+            }
+            
+            if(is_numeric($key)) {
+                $key = $value;
+            }
+            
+            $user_defined_params[$key] = $row[$value];
+        }
+
+        // all needed params
+        $all_params = array_merge($user_defined_params, $user_url_params);
+        
+        // set new url
+        $new_url = $host . $path . '?' . http_build_query($all_params);
+
+        return $new_url;
     }
 
     /**
@@ -159,7 +185,7 @@ class Action
      */
     public function getParams()
     {
-	return $this->params;
+        return $this->params;
     }
 
     /**
@@ -167,10 +193,30 @@ class Action
      * @param type $params
      * @return Action 
      */
-    public function setParams(array $params)
+    public function setParams(array $params = array())
     {
-	$this->params = $params;
-	return $this;
+        $this->params = $params;
+        return $this;
+    }
+    
+    /**
+     * returns the url paramns
+     * @return array
+     */
+    public function getKeys()
+    {
+        return $this->keys;
+    }
+
+    /**
+     * sets the url keys
+     * @param type $keys
+     * @return Action 
+     */
+    public function setKeys(array $keys = array())
+    {
+        $this->keys = $keys;
+        return $this;
     }
 
     /**
@@ -179,10 +225,9 @@ class Action
      */
     public function getCondition($row)
     {
-	$cond = $this->condition;
-	 $a = ($cond != null) ? call_user_func($cond, $row) : true;
-         
-         return $a;
+        $cond = $this->condition;
+
+        return ($cond != null) ? call_user_func($cond, $row) : true;
     }
 
     /**
@@ -192,28 +237,8 @@ class Action
      */
     public function setCondition($condition)
     {
-	$this->condition = $condition;
-	return $this;
-    }
-
-    /**
-     * returns the PK Index
-     * @return mixed
-     */
-    public function getPkIndex()
-    {
-	return $this->pkIndex;
-    }
-
-    /**
-     * the PK index of the row
-     * @param mixed $pkIndex
-     * @return Action 
-     */
-    public function setPkIndex($pkIndex)
-    {
-	$this->pkIndex = $pkIndex;
-	return $this;
+        $this->condition = $condition;
+        return $this;
     }
 
     /**
@@ -222,7 +247,7 @@ class Action
      */
     public function getCssClass()
     {
-	return $this->cssClass;
+        return $this->cssClass;
     }
 
     /**
@@ -231,7 +256,7 @@ class Action
      */
     public function setCssClass($cssClass)
     {
-	$this->cssClass = (string) $cssClass;
+        $this->cssClass = (string) $cssClass;
     }
 
     /**
@@ -241,57 +266,37 @@ class Action
      */
     public function attendToRowCondition(array $row)
     {
-	$condition = $this->getCondition($row);
-	return true;
+        $this->getCondition($row);
+
+        return true;
     }
 
     /**
-     * returns the url string based on a row
-     * @param array $row
+     * 
      * @return string
      */
-    public function getUrl(array $row)
-    {
-	$params = array();
-
-	if (null !== $this->getUserDefinedUrl()) {
-	    //returns full defined url
-	    $url = $this->getUserDefinedUrl();
-	} else {
-	    //build a zend framework url
-	    if (null !== $this->getActionName())
-		$params['action'] = $this->getActionName();
-	    if (null !== $this->getControllerName())
-		$params['controller'] = $this->getControllerName();
-	    if (null !== $this->getPkIndex())
-		$params[$this->getPkIndex()] = $row[$this->getPkIndex()];
-	    if (null !== $this->getParams())
-		$params = array_merge($params, $this->getParams());
-
-
-	    $helper = new \Zend_View_Helper_Url;
-	    $url = $helper->url($params);
-	}
-	return $url;
-    }
-
     public function getTitle()
     {
-	return $this->title;
+        return $this->title;
     }
 
+    /**
+     * 
+     * @param string $title
+     */
     public function setTitle($title)
     {
-	$this->title = $title;
+        $this->title = $title;
     }
 
     public function getTarget()
     {
-	return $this->target;
+        return $this->target;
     }
 
     public function setTarget($target)
     {
-	$this->target = $target;
+        $this->target = $target;
     }
+
 }

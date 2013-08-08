@@ -23,19 +23,13 @@ namespace Mgrid\Column\Render;
 use Mgrid\Column\Render;
 
 /**
- * Creates a link for the field
+ * Handle Columns
  * 
  * @since       0.0.1
  * @author      Renato Medina <medinadato@gmail.com>
  */
-
-class Link extends Render\ARender implements Render\IRender
+class EnableOrDisabled extends Render\ARender implements Render\IRender
 {
-    /**
-     *
-     * @var string 
-     */
-    protected $href;
 
     /**
      *
@@ -45,30 +39,8 @@ class Link extends Render\ARender implements Render\IRender
     {
         $row = $this->getRow();
         $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
+
+        return (($row[$index] == 'Y') || ($row[$index] == 1)) ? 'Enable' : 'Disabled';
     }
 
-    /**
-     * 
-     * @param string $href
-     */
-    public function setHref($href)
-    {
-        $this->href = $href;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
-    }
 }
-

@@ -1,0 +1,49 @@
+<div class="mgrid-pager">
+    {% if grid.hasPager == true %}
+    {% set leftOff = (pager.getCurPos == pager.getFirstPage) %}
+    {% set rightOff = (pager.getCurPos == pager.getLastPage) %}
+        {% if pager.getTotalPages > 0 %}
+        <span>Page </span>
+        
+        {% if leftOff == 0 %}
+        <a href="{{ pager.getPreviousUrl }}"><span class="mgrid-pager-icon mgrid-pager-previous">&lt;</span></a>
+        {% else %}
+        <span class="mgrid-pager-icon mgrid-pager-previous mgrid-element-no-active">&lt;</span>
+        {% endif %}
+
+        <select name="mgrid-pager" id="mgrid-pager-select" class="mgrid-pager-select">
+            {% for key in 1..pager.getTotalPages %}
+                {% set url = pager.getCurUrl(key) %}
+                
+                {% set selected = '' %}
+                {% if pager.getCurPos == key %}
+                {% set selected = 'selected="selected"' %}
+                {% endif %}
+                
+                <option value="{{ url }}" {{ selected }}>{{ key }}</option>
+            {% endfor %}
+        </select>
+
+        {% if rightOff == 0 %}
+        <a href="{{ pager.getNextUrl }}"><span class="mgrid-pager-icon mgrid-pager-next">&gt;</span></a>
+        {% else %}
+        <span class="mgrid-pager-icon mgrid-pager-next mgrid-element-no-active">&gt;</span>
+        {% endif %}
+        
+        <span> of {{ pager.getTotalPages }} page(s) | </span>
+        {% endif %}
+<!--        
+        <span class="massDelimiter">|</span>
+        <span><?php echo $this->translate('View') ?></span>
+
+        <select name="maxPerPage">
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
+
+        <span><?php echo $this->translate('per page') ?></span>
+        <span class="massDelimiter">|</span>
+-->
+    {% endif %}
+    <span>Total of {{ pager.getNumRecords }} register(s) found.</span>
+</div>

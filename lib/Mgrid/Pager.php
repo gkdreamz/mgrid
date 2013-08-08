@@ -1,8 +1,6 @@
 <?php
 
 /*
- *  $Id$
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -17,95 +15,147 @@
  *
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the LGPL. For more information, see
- * <http://www.doctrine-project.org>.
- */
-
-/**
- * Doctrine_Pager
- *
- * @author      Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @package     Doctrine
- * @subpackage  Pager
- * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision$
- * @link        www.doctrine-project.org
- * @since       0.9
+ * <http://mgrid.mdnsolutions.com/license>.
  */
 
 namespace Mgrid;
 
+/**
+ * Set number of records por pag
+ * 
+ * @since       0.0.2
+ * @author      Renato Medina <medinadato@gmail.com>
+ */
 class Pager
 {
 
     /**
-     * @var integer $_numResults        Number of results found
+     * @var array 
      */
-    protected $numResults;
+    protected $request = array();
 
     /**
-     * @var integer $_maxPerPage        Maximum number of itens per page
+     * @var array 
      */
-    protected $maxPerPage = 25;
-
+    protected $resultSet = array();
+    
     /**
-     * @var integer $page               Current page
+     * @var integer $maxPerPage Maximum number of itens per page
      */
-    protected $page;
-
-    /**
-     * @var integer $_lastPage          Last page (total of pages)
-     */
-    protected $lastPage;
-
+    protected $maxPerPage;
+    
     /**
      * pager offset
      * @var int
      */
-    protected $offset;
+    protected $offset = 0;
+
+    /**
+     * @var int current position of the pagination
+     */
+    protected $curPos = 1;
+    /**
+     * @var integer $numRecords Number of results found
+     */
+    protected $numRecords;
+
+    /**
+     * @var integer $page Current page
+     */
+    protected $page;
+
+    /**
+     * @var integer $lastPage Last page (total of pages)
+     */
+    protected $lastPage;
 
     /**
      * pager maxset
      * @var int
      */
     protected $maxset;
-
     /**
-     * 
-     * @param type $numResults
-     * @param type $page
-     * @param int $maxPerPage
-     * @return Mgrid\Pager
+     * Process the pagination
+     * @return boolean
      */
-    public function __construct($numResults, $page, $maxPerPage = false)
-    {
-        $this->setNumResults($numResults)
-                ->setPage($page);
-        
-        if($maxPerPage)
-            $this->setMaxPerPage($maxPerPage);
-        
-        // settings
+    public function apply()
+    {   
+        if ($this->getNumRecords() == 0) {
+            return $this;
+        }
+
         $this->adjustOffset();
-        
+        $this->setResultSet(array_slice($this->getResultSet(), $this->getOffset(), $this->getMaxPerPage()));
+
         return $this;
     }
 
-
     /**
-     * Adjusts last page of Pager, offset and limit
-     * @return void
+     * Returns request
+     * @return int
      */
-    protected function adjustOffset()
+    public function getRequest()
     {
-        // Define new total of pages
-        $this->setLastPage(
-                max(1, ceil($this->getNumResults() / $this->getMaxPerPage()))
-        );
-        
-        $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
-        $this->offset = $offset;
+        return $this->request;
     }
 
+    /**
+     * Sets the request
+     * @return int
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+    
+    /**
+     * Returns result set
+     * @return int
+     */
+    public function getResultSet()
+    {
+        return $this->resultSet;
+    }
+
+    /**
+     * Sets the result set
+     * @return int
+     */
+    public function setResultSet($resultSet)
+    {
+        $this->resultSet = $resultSet;
+        return $this;
+    }
+    
+    /**
+     * Returns the maximum number of itens per page
+     *
+     * @return int maximum number of itens per page
+     */
+    public function getMaxPerPage()
+    {        
+        return $this->maxPerPage;
+    }
+
+    /**
+     * Defines the maximum number of itens per page and automatically adjust 
+     * offset and limits
+     *
+     * @param int $max maximum number of itens per page
+     * @return \Mgrid\Pager
+     */
+    public function setMaxPerPage($max)
+    {
+        if (0 < (int) $max) {
+            $this->maxPerPage = (int) $max;
+        }
+        
+        $this->adjustOffset();
+
+        return $this;
+    }
+    
     /**
      * returns the offset 
      * @return int
@@ -114,7 +164,7 @@ class Pager
     {
         return $this->offset;
     }
-
+    
     /**
      * returns the maxset 
      * @return int
@@ -123,41 +173,56 @@ class Pager
     {
         return ($this->getOffset() + $this->getMaxPerPage());
     }
-
+    
     /**
-     * sets the source to paginate
-     * @param Mgrid\Source\ISource $source
-     * @return Pager 
-     */
-    public function setSource(\Mgrid\Source\ISource $source)
-    {
-        $this->source = $source;
-        return $this;
-    }
-
-    /**
-     * getNumResults
-     *
-     * Returns the number of results found
-     *
-     * @return int        the number of results found
-     */
-    public function getNumResults()
-    {
-        return $this->numResults;
-    }
-
-    /**
-     * setNumResults
-     *
-     * Defines the number of total results on initial query
-     *
-     * @param $nb       Number of results found on initial query fetch
+     * Adjusts last page of Pager, offset and limit
      * @return void
      */
-    protected function setNumResults($nb)
+    protected function adjustOffset()
     {
-        $this->numResults = (int) $nb;
+        // Define new total of pages
+        $this->setLastPage(max(1, ceil($this->getNumRecords() / $this->getMaxPerPage())));
+        
+        $offset = ($this->getCurPos() - 1) * $this->getMaxPerPage();
+        $this->offset = $offset;
+        
+        return $this;
+    }
+    
+    /**
+     * Returns the number of results found
+     *
+     * @return int the number of results found
+     */
+    public function getNumRecords()
+    {
+        if(!$this->numRecords) {
+            $this->numRecords = count($this->getResultSet());
+        }
+        
+        return $this->numRecords;
+    }
+    
+    /**
+     * Returns the actual page
+     * @return int
+     */
+    public function getCurPos()
+    {
+        if (isset($this->request['mgrid']['page'])) {
+            $this->curPos = (int) $this->request['mgrid']['page'];
+        }
+        
+        return $this->curPos;
+    }
+
+    /**
+     * Sets the actual page
+     * @return int
+     */
+    public function setCurPos($curPos)
+    {
+        $this->curPos = (int) $curPos;
         return $this;
     }
 
@@ -174,6 +239,15 @@ class Pager
     }
 
     /**
+     * Returns total of pages
+     * @return int
+     */
+    public function getTotalPages()
+    {
+        return (int) ceil($this->getNumRecords() / $this->getMaxPerPage());
+    }
+    
+    /**
      * getLastPage
      *
      * Returns the last page (total of pages)
@@ -183,15 +257,6 @@ class Pager
     public function getLastPage()
     {
         return $this->lastPage;
-    }
-
-    /**
-     * Returns total of pages
-     * @return int
-     */
-    public function getTotalPages()
-    {
-        return $this->getLastPage();
     }
 
     /**
@@ -206,21 +271,9 @@ class Pager
     {
         $this->lastPage = $page;
 
-        if ($this->getPage() > $page) {
-            $this->setPage($page);
+        if ($this->getCurPos() > $page) {
+            $this->setCurPos($page);
         }
-    }
-
-    /**
-     * getLastPage
-     *
-     * Returns the current page
-     *
-     * @return int        current page
-     */
-    public function getPage()
-    {
-        return $this->page;
     }
 
     /**
@@ -228,11 +281,11 @@ class Pager
      *
      * Returns the next page
      *
-     * @return int        next page
+     * @return int next page
      */
     public function getNextPage()
     {
-        return (int) min($this->getPage() + 1, $this->getLastPage());
+        return (int) min($this->getCurPos() + 1, $this->getLastPage());
     }
 
     /**
@@ -244,24 +297,20 @@ class Pager
      */
     public function getPreviousPage()
     {
-        return (int) max($this->getPage() - 1, $this->getFirstPage());
+        return (int) max($this->getCurPos() - 1, $this->getFirstPage());
     }
 
     /**
-     * getFirstIndice
-     *
      * Return the first indice number for the current page
      *
      * @return int First indice number
      */
     public function getFirstIndice()
     {
-        return ($this->getPage() - 1) * $this->getMaxPerPage() + 1;
+        return ($this->getCurPos() - 1) * $this->getMaxPerPage() + 1;
     }
 
     /**
-     * getLastIndice
-     *
      * Return the last indice number for the current page
      *
      * @return int Last indice number
@@ -272,83 +321,39 @@ class Pager
     }
 
     /**
-     *
-     * Return true if it's necessary to paginate or false if not
-     *
-     * @return bool
+     * 
+     * @param array $params
+     * @return string
      */
-    public function haveToPaginate()
+    public function getUrl(array $params = array())
     {
-        return $this->getNumResults() > $this->getMaxPerPage();
+        return $_SERVER['SCRIPT_NAME'];
     }
-
+    
     /**
-     * setPage
-     *
-     * Defines the current page
-     *
-     * @param $page       current page
-     * @return void
+     * 
+     * @return string
      */
-    public function setPage($page)
+    public function getCurUrl($index)
     {
-        $page = intval($page);
-        $this->page = ($page <= 0) ? 1 : $page;
-        return $this;
+        return $this->getUrl() . '?mgrid[page]=' . $index;
     }
-
+    
     /**
-     * getLastPage
-     *
-     * Returns the maximum number of itens per page
-     *
-     * @return int        maximum number of itens per page
+     * 
+     * @return string
      */
-    public function getMaxPerPage()
+    public function getPreviousUrl()
     {
-        return $this->maxPerPage;
+        return $this->getUrl() . '?mgrid[page]=' . $this->getPreviousPage();
     }
-
+    
     /**
-     * setMaxPerPage
-     *
-     * Defines the maximum number of itens per page and automatically adjust offset and limits
-     *
-     * @param $max       maximum number of itens per page
-     * @return Pager
+     * 
+     * @return string
      */
-    public function setMaxPerPage($max)
+    public function getNextUrl()
     {
-        if (0 < (int) $max) {
-            $this->maxPerPage = $max;
-            
-            // settings
-//            $this->adjustOffset();
-        }
-        
-        $this->adjustOffset();
-
-        return $this;
+        return $this->getUrl() . '?mgrid[page]=' . $this->getNextPage();
     }
-
-    /**
-     * getResultsInPage
-     *
-     * Returns the number of itens in current page
-     *
-     * @return int    Number of itens in current page
-     */
-    public function getResultsInPage()
-    {
-        $page = $this->getPage();
-
-        if ($page != $this->getLastPage()) {
-            return $this->getMaxPerPage();
-        }
-
-        $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
-
-        return abs($this->getNumResults() - $offset);
-    }
-
 }

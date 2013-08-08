@@ -1,6 +1,9 @@
 # Mgrid - Grid solution for PHP 5
 
-Mgrid generates for you a optimal and handy grid.
+Mgrid generates for you a optimal and handy grid. This version has great 
+improvements in regardless to renders, dependencies and refactoring the code.
+Please take a look at the [`changelog`][1]
+
 
 [ DO NOT USE THIS VERSION, THE NUMBER OF BUGS ARE UNBELIEVABLE]
 [ PLEASE DOWNLOAD THE v.0.0.2]
@@ -10,6 +13,10 @@ Thanks, Renato Medina.
 
 
 ## Instalation
+
+### The library
+
+#### Composer
 
 The recommended way to install Mgrid is [through
 composer](http://getcomposer.org). Just create a `composer.json` file into the 
@@ -24,7 +31,21 @@ root of your project and add the following lines:
 then run the `php composer.phar install` command to install it. At this stage 
 everything should go smooth. 
 
+
+#### Download
+
 Alternatively, you can download the [`mgrid.zip`][1] file and extract it.
+
+### The Assets
+
+Into the package you can find the assets:
+
+    YOUR_FOLDER_VENDOR/mdn/lib/Mgrid/templates/default/assets
+
+Here you have 2 options:
+
+    1. Just move the folder to the root of your application;
+    2. Just create a symlink.
 
 
 ## Usage
@@ -53,16 +74,18 @@ See the `doc` directory for more detailed documentation or go to http://mgrid.md
 ##Requirements
 
 - Any flavor of PHP 5.3 or above should do
-- [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
+- Twig template engine 1.* version
 
 ##Submitting bugs and feature requests
 
-Bugs and feature request are tracked on [GitHub](http://mgrid.mdnsolutions.com/issues)
+Bugs and feature request are tracked on [GitHub](https://github.com/medinadato/mgrid/issues)
 
 
-##Frameworks Integration
+##PHP and Frameworks Compatibility
 
-At the moment this grid is only available for Zend Framework 1.x (Sorry for that).
+It can either be used with flat PHP or any Framework out there. 
+Here I've tried to follow the [PSR][4] standards. Making this component as 
+portable as possible. 
 
 
 ##Author
@@ -79,3 +102,5 @@ Mgrid is licensed under the MIT License - see the `LICENSE` file for details
 
 [1]: http://mgrid.mdnsolutions.com/download
 [2]: https://github.com/medinadato/mgrid/
+[3]: http://mgrid.mdnsolutions.com/changelog
+[4]: http://www.php-fig.org/psr/2/

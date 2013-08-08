@@ -1,24 +1,32 @@
 <?php
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the LGPL. For more information, see
+ * <http://mgrid.mdnsolutions.com/license>.
+ */
+
 namespace Mgrid\Source;
 
 /**
- * LICENSE
+ * Interface class
  *
- * This source file is subject to the new BSD license
- * It is  available through the world-wide-web at this URL:
- * http://www.petala-azul.com/bsd.txt
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to geral@petala-azul.com so we can send you a copy immediately.
- *
- * @package   Mgrid\Source
- * @author    Daniel Lima <yourwebmaker@gmail.com>
- * @copyright 2011 CoreGrid
- * @license   http://www.petala-azul.com/bsd.txt   New BSD License
- * @version   $Id$
- * @link      http://zfdatagrid.com
+ * @since       0.0.2
+ * @author      Renato Medina <medinadato@gmail.com>
  */
-interface ISource
+
+interface SourceInterface
 {
 
     /**

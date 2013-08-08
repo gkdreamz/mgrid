@@ -1,0 +1,280 @@
+@CHARSET "UTF-8";
+/*
+    Document   : mgrid.css
+    Created on : Apr 13, 2011, 11:15:27 AM
+    Author     : Renato Medina <medinadato@gmail.com>
+    Description: Mgrid structure
+*/
+
+#mgrid-form {
+    width: 100%;
+}
+
+.mgrid-control {
+    display: table;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.mgrid-control-opt {
+    margin-right: 10px;
+}
+
+/** Mgrid - Pager */
+
+.mgrid-pager {
+    float:left;
+    width: auto;
+}
+.mgrid-pager img {
+    vertical-align: middle;
+}
+.mgrid-pager form {
+    display: inline; 
+    width: 0;
+}
+
+span.mgrid-pager-icon {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    overflow: hidden;
+    text-indent: 50px;
+    vertical-align: middle;
+}
+
+select.mgrid-pager-select {
+    min-height: 26px;
+}
+
+span.mgrid-pager-previous {
+    background: url('../img/mgrid_icons.png') -248px -283px no-repeat;
+}
+
+span.mgrid-pager-next {
+    background: url('../img/mgrid_icons.png') -188px -283px no-repeat;
+}
+
+.mgrid-element-no-active {
+    opacity: 0.4;
+    /* For IE8 and earlier */
+    filter: alpha(opacity=40); 
+}
+
+/** Mgrid - Export */
+
+.mgrid-export {
+    float: right;
+}
+.mgrid-export select {
+    width: 90px;
+    vertical-align: top;
+}
+
+div.mgrid-order {
+    float: right;
+    text-align: right;
+}
+
+.btnRemOrder {
+    margin-right: 5px;
+}
+
+div.mgrid-filter {
+    float: right;
+    text-align: right;
+}
+
+/* Mgrid - Table */
+
+.mgrid-table {
+    width: 100%;
+    margin-bottom: 5px;
+}
+.mgrid-table ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mgrid-table tr.mgrid-table-tr-rs:hover td {
+    background-color: #f2d4b0;
+}
+
+tr.mgrid-table-tr-rs-color td {
+    background-color: #c9deea;
+}
+.mgrid-table td {
+    border-left: 1px solid #EDFFF9;
+    border-right: 1px solid #EDFFF9;
+    border-bottom: 1px solid #EDFFF9;
+    padding: 0 2px;
+}
+.mgrid-table-title {
+    height: 25px;
+}
+.mgrid-table-title td {
+    background: url('../img/mgrid_sort_row_bg.gif') repeat-x center center;
+}
+.mgrid-table-title td a {
+    color: #333;
+    font-weight: bold;
+}
+.mgrid-table-title td a span {
+    display: block;
+    line-height: 20px;
+    margin: 0 5px;
+}
+.mgrid-table-title a.sort {
+    display: block;
+    background: repeat-x top left url('../img/mgrid_sort_off_bg.png');
+}
+.mgrid-table-title a.sort span {
+    background: no-repeat right center url('../img/mgrid_sort_both.png');
+}
+.mgrid-table-title a.sortArrowAsc, .mgrid-table-title a.sortArrowDesc {
+    background: repeat-x top left url('../img/mgrid_sort_on_bg.gif');
+}
+.mgrid-table-title a.sortArrowAsc span {
+    background: no-repeat right center url('../img/mgrid_sort_asc.png');
+}
+.mgrid-table-title a.sortArrowDesc span {
+    background: no-repeat right center url('../img/mgrid_sort_desc.png');
+}
+.mgrid-table-tr-filter {
+    background: #D6E8F5;
+    height: 30px;
+}
+.mgrid-table-tr-rs input[type=checkbox] {
+    border: 0;
+}
+.mgrid-table-tr-rs .gRowCheck {
+    text-align: center;
+    width: 22px;
+}
+
+/* Table rows' options */
+
+.mgrid-table-tr-opc-row {
+    width: 22px;
+}
+
+.mgrid-table-div-opc-row {
+    position: relative;
+}
+.mgrid-table-div-opc-row span.mgrid-table-div-opc-img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    background: url('../assets/img/mgrid_icons.png') -308px -163px no-repeat;
+}
+
+.mgrid-table-div-opc-row ul.mgrid-table-div-opc-row-ul-list {
+    margin: 0 0 0 26px;
+}
+.mgrid-table-div-opc-row ul li ul {
+    display: none;
+    z-index: 99;
+}
+.mgrid-table-div-opc-row ul li:hover ul {
+    display: block;
+}
+.mgrid-table-div-opc-row ul li ul {
+    position: absolute;
+    top:0;
+}
+.mgrid-table-div-opc-row ul li ul li {
+    background: #F3F3F3;
+    border: 1px dotted #FFF;
+    line-height: 18px;
+}
+span.mgrid-table-tr-opc-icon {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    overflow: hidden;
+    text-indent: 50px;
+    background: url('../img/mgrid_icons.png') -308px -163px;
+}
+.mgrid-table-div-opc-row ul li ul li:hover {
+    background: #D6E8F5;
+}
+.mgrid-table-div-opc-row ul li a {
+    min-width: 210px;
+    display: inline-block;
+    color: #333;
+    line-height: 26px;
+}
+.mgrid-table-div-opc-row a span.mgrid-table-div-opc-link-img {
+    float: left;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background: url('../img/mgrid_icons.png') -368px -163px;
+    margin-right: 5px;
+}
+.mgrid-table-div-opc-row a.accept span.mgrid-table-div-opc-link-img {
+    background-position: -368px -223px;
+}
+.mgrid-table-div-opc-row a.view  span.mgrid-table-div-opc-link-img {
+    background-position: -8px -193px;
+}
+.mgrid-table-div-opc-row a.del span.mgrid-table-div-opc-link-img {
+    background-position: -98px -163px;
+}
+.mgrid-table-div-opc-row a.pdf span.mgrid-table-div-opc-link-img {
+    background-position: -338px -133px;
+}
+
+.mgrid-align-left {
+    text-align: left;
+}
+
+.mgrid-align-right {
+    text-align: right;
+}
+
+.mgrid-align-center {
+    text-align: center;
+}
+
+/* Mass Action */
+
+.gMassAction {
+    display: table;
+    width: 100%;
+    margin-bottom: 5px;
+    background: repeat-x top left url('img/massaction_bg.gif') #c8c8c8;
+    border: 1px solid #CCC;
+    line-height: 24px;
+}
+.gSelect {
+    float: left;
+    margin-left: 10px;
+}
+.gSelect a {
+    color: #ED6502;
+}
+.gAction {
+    float: right;
+    margin-right: 10px;
+}
+.gAction select {
+    width: 100px;
+}
+
+label#checkAllMgridLbl {
+    line-height: 20px;
+}
+input#checkAllMgrid {
+    margin:0;
+}
+span.massDelimiter {
+    margin:0 15px;
+}
+
+/* Form */
+
+.mgrid-filter-field {
+    width: 100%;
+}

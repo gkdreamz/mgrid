@@ -1,5 +1,4 @@
 <?php
-
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -18,57 +17,64 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Column\Render;
-
-use Mgrid\Column\Render;
+namespace Mgrid\Source;
 
 /**
- * Creates a link for the field
- * 
- * @since       0.0.1
- * @author      Renato Medina <medinadato@gmail.com>
+ * Basic methods for the source object
+ *
+ * @author Renato Medina <medinadato@gmail.com>
  */
 
-class Link extends Render\ARender implements Render\IRender
+abstract class SourceAbstract
 {
-    /**
-     *
-     * @var string 
-     */
-    protected $href;
 
     /**
-     *
-     * @return string
+     * grid used by source
+     * @var Grid
      */
-    public function render()
+    protected $grid = null;
+    /**
+     * pager used by source
+     * @var type 
+     */
+    protected $pager = null;
+    /**
+     * order config of the source
+     * @var array
+     */
+    protected $order = array();
+
+    /**
+     * Sets the order config
+     * @param array $order
+     * @return ASource 
+     */
+    public function setOrder(array $order)
     {
-        $row = $this->getRow();
-        $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
+	$this->order = $order;
+	return $this;
     }
 
     /**
-     * 
-     * @param string $href
+     * sets the limit
+     * @param type $limit
+     * @return ASource 
      */
-    public function setHref($href)
+    public function setLimit($limit)
     {
-        $this->href = $href;
+	$this->limit = (int) $limit;
+	return $this;
     }
-    
+
     /**
-     * 
-     * @return string
+     * sets the offset
+     * @param type $offset
+     * @return ASource 
      */
-    public function getHref()
+    public function setOffset($offset)
     {
-        return $this->href;
+	$this->offset = (int) $offset;
+	return $this;
     }
+
 }
-

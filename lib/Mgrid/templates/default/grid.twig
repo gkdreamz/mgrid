@@ -1,0 +1,161 @@
+    <form id="mgrid-form" action="{{grid.getAppUrl}}" method="get">
+
+        <div id="{{grid.getId}}" class="mgrid">
+
+            <div class="mgrid-control">
+
+                {% if grid.hasPager == true %}
+                {% include 'pager.twig' %}
+                {% endif %}
+
+                {% if grid.hasFilter == true %}
+                <div class="mgrid-filter mgrid-control-opt">
+                    <button id="mgrid-remove-filter" type="button"><span>Remove Filters</span></button>
+                    <button id="mgrid-add-filter" type="button">Apply Filters</button>
+                </div>
+                {% endif %}
+
+                {% if grid.hasOrder == true %}
+                <div class="mgrid-order mgrid-control-opt">
+                    <button id="mgrid-remove-ordering" type="button"><span>Remove Ordering</span></button>
+                </div>
+                {% endif %}
+
+                {% if grid.hasExport == true %}
+                <div class="mgrid-export mgrid-control-opt">
+                    <select name="mgrid[export]">
+                        <option value="" selected="selected">Format</option>
+                        <option value="csv">CSV (Excel)</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+                    <button id="mgrid-export" type="button"><span>Export</span></button>
+                </div>
+                {% endif %}
+                
+            </div>
+            
+            {% if grid.hasMassAction == true %}
+            <div class="gMassAction">
+                <div class="gSelect">
+                    <label for="checkAllGrid" id="checkAllGridLbl">
+                        <input name="checkAllGrid" id="checkAllGrid" type="checkbox" class="massaction-check-all" style="float: left; margin-right: 2px;"/><?php echo $this->translate('Check/Uncheck All') ?></label>
+                    <span class="massDelimiter">|</span>
+                    <span><span class="check-selected-counter">0</span> <?php echo $this->translate('selected') ?></span>
+                </div>
+                <div class="gAction">
+                    <span>Mass Action: </span>
+                    <select name="massaction-select">
+                        <option value=""></option>
+                        <?php foreach ($grid->getMassActions() as $name => $label) : ?>
+                            <option value="<?php echo $name ?>"><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button type="button" class="massaction-button"><span><?php echo $this->translate('Submit') ?></span></button>
+                </div>
+                <form class="massaction-form" method="post">
+                    <input type="hidden" value="" class="massaction-values"/>
+                </form>
+            </div>
+            {% endif %}
+
+            <table class="mgrid-table {% if attribs['class'] %} {{ attribs['class'] }} {% endif %}">
+                {% if attribs['caption'] %} <caption>{{ attribs['caption'] }}</caption> {% endif %}
+                
+                <tbody>
+                    {% if grid.hasHeader == true %}
+                    <tr class="mgrid-table-title">
+                        
+                        {% if grid.hasActions == true %}
+                            <td></td>
+                        {% endif %}
+                            
+                        {% if grid.hasMassAction == true %}
+                            <td></td>
+                        {% endif %}
+                            
+                        {% for column in grid.getColumns %}
+                            {% if (grid.hasOrder == true  and column.hasOrder == true) %}
+                                <td width="{{ column.getWidth }}" class="{{ column.getAlign }}">
+                                    <a href="{{ column.getHref }}" title="{{ column.getLabel }}" class="{{ column.getClass }}"><span>{{ column.getLabel }}</span></a>
+                                </td>
+                            {% else %}
+                                <td width="{{ column.getWidth }}" class="{{ column.getAlign }}"><span>{{ column.getLabel }}</span></td>
+                            {% endif %}
+                        {% endfor %}
+                                
+                    </tr>
+                    {% endif %}
+                    
+                    {% if grid.hasFilter %}
+                    <input type="hidden" name="mgrid[addFilter]" value="1" />
+                    <tr class="mgrid-table-filter">
+                        
+                        {% if grid.hasActions == true %}
+                            <td></td>
+                        {% endif %}
+                            
+                        {% if grid.hasMassAction == true %}
+                            <td></td>
+                        {% endif %}
+
+                        {% for column in grid.getColumns %}
+                            <td>
+                                {% if column.hasFilter == true %}
+                                    {{ column.getFilter.render | raw }}
+                                {% endif %}
+                            </td>	
+                        {% endfor %}
+                    </tr>
+                    {% endif %}                
+                
+                {% for key, row in grid.getResultSet %}
+                <tr class="mgrid-table-tr-rs {% if (key % 2) %}mgrid-table-tr-rs-color{% endif %}">
+                    
+                    {% if grid.hasMassAction == true %}
+                        <td class="gRowCheck"><input type="checkbox" name="mass-id[]" class="massaction-check-opt" value="{{ row[grid.getPkIndex]}}" /></td>
+                    {% endif %}
+                        
+                    {% if grid.hasActions == true %}
+                        <td class="mgrid-table-tr-opc-row">
+                            <div class="mgrid-table-div-opc-row">
+                                <ul>
+                                    <li><span class="mgrid-table-tr-opc-icon">Options</span>
+                                        <ul class="mgrid-table-div-opc-row-ul-list">
+                                            {% for action in grid.getActionsByRow(row) %}
+                                                {% if action.getCondition(row) == true %}
+                                                <li>
+                                                    <a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
+                                                        <span class="mgrid-table-div-opc-link-img"></span>{{ action.getLabel }}
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    {% endif %}
+                    
+                    {% for column in grid.getColumns %}
+                        <td class="{{ column.getAlign }}">{{ column.getRender(row).render | raw }}</td>
+                    {% endfor %}
+                        
+                </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+            
+            {% if grid.hasPager == true %}
+            {% include 'pager.twig' %}
+            {% endif %}
+            
+        </div>
+    </form>
+
+    <!-- Stylesheets -->
+    <link rel='stylesheet' href='/test/app/assets/css/mgrid.css' type='text/css' media='all' />
+    
+    <!-- Javascript -->
+    <script type='text/javascript' src='/test/app/assets/js/mgridloader.js'></script>

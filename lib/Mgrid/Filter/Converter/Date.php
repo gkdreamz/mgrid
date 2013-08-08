@@ -18,57 +18,31 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Column\Render;
-
-use Mgrid\Column\Render;
+namespace Mgrid\Filter\Converter;
 
 /**
- * Creates a link for the field
+ * Handle the date type filters
  * 
- * @since       0.0.1
+ * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
 
-class Link extends Render\ARender implements Render\IRender
+class Date
 {
-    /**
-     *
-     * @var string 
-     */
-    protected $href;
 
     /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $row = $this->getRow();
-        $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
-    }
-
-    /**
+     * Format the date
      * 
-     * @param string $href
+     * @param string $data Data no formato (dd/mm/YYYY)
+     * @return int Data como numero (YYYYMMDD) 
      */
-    public function setHref($href)
+    public function fromBRtoNumber($data)
     {
-        $this->href = $href;
+        $ano = substr($data, 6, 4);
+        $mes = substr($data, 3, 2);
+        $dia = substr($data, 0, 2);
+
+        return (int) $ano . $mes . $dia;
     }
     
-    /**
-     * 
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
-    }
 }
-

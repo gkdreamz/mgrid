@@ -18,57 +18,33 @@
  * <http://mgrid.mdnsolutions.com/license>.
  */
 
-namespace Mgrid\Column\Render;
-
-use Mgrid\Column\Render;
+namespace Mgrid;
 
 /**
- * Creates a link for the field
+ * Handle the grid configurations
  * 
- * @since       0.0.1
+ * @since       0.0.2
  * @author      Renato Medina <medinadato@gmail.com>
  */
 
-class Link extends Render\ARender implements Render\IRender
+class Config
 {
     /**
-     *
-     * @var string 
-     */
-    protected $href;
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $row = $this->getRow();
-        $index = $this->getColumn()->getIndex();
-        
-        $url = ($this->getHref()) ? $this->getHref() : $row[$index];
-        
-        $html = '<a href="' . $url . '" target="_blank" />' . $row[$index] . '</a>';
-        
-        return $this->output($html);
-    }
-
-    /**
      * 
-     * @param string $href
+     * @param type $session
      */
-    public function setHref($href)
+    public static function getConfig($session = false)
     {
-        $this->href = $href;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
+        $config = parse_ini_file(__DIR__ . "/config.ini", true);
+        
+        if($session) {
+            if(!isset($config[$session])) {
+                throw new \Mgrid\Exception('Session does not exist into config file');
+            }
+            
+            return $config[$session];
+        }
+        
+        return $config;
     }
 }
-
