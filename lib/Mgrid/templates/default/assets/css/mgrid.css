@@ -207,7 +207,7 @@ span.mgrid-table-tr-opc-icon {
 }
 .mgrid-table-div-opc-row a span.mgrid-table-div-opc-link-img {
     float: left;
-    display: block;
+    display: inline-block;
     width: 26px;
     height: 26px;
     background: url('../img/mgrid_icons.png') -368px -163px;

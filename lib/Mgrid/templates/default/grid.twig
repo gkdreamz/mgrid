@@ -1,4 +1,4 @@
-    <form id="mgrid-form" action="?" method="get">
+    <form id="mgrid-form" action="{{grid.getAppUrl}}" method="get">
 
         <div id="{{grid.getId}}" class="mgrid">
 
@@ -124,7 +124,7 @@
                                             {% for action in grid.getActionsByRow(row) %}
                                                 {% if action.getCondition(row) == true %}
                                                 <li>
-                                                    <a href="{{ action.getHref(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
+                                                    <a href="{{ action.getUrl(row) }}" class="{{ action.getCssClass }}" title="{{ action.getTitle }}" target="{{ action.getTarget }}">
                                                         <span class="mgrid-table-div-opc-link-img"></span>{{ action.getLabel }}
                                                     </a>
                                                 </li>

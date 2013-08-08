@@ -11,7 +11,7 @@
         <span class="mgrid-pager-icon mgrid-pager-previous mgrid-element-no-active">&lt;</span>
         {% endif %}
 
-        <select name="page" id="mgrid-pager-select" class="mgrid-pager-select">
+        <select name="mgrid-pager" id="mgrid-pager-select" class="mgrid-pager-select">
             {% for key in 1..pager.getTotalPages %}
                 {% set url = pager.getCurUrl(key) %}
                 

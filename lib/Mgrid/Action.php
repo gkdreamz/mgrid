@@ -40,9 +40,15 @@ class Action
      * @var string
      */
     protected $href;
+    
+    /**
+     * the keys from the source for the action
+     * @var string
+     */
+    protected $keys = array();
 
     /**
-     * the params for the action
+     * the user params for the action
      * @var string
      */
     protected $params = array();
@@ -119,18 +125,58 @@ class Action
     }
 
     /**
-     * returns the user defined url
+     * returns the user defined href
      * @return string
      */
     public function getHref()
     {
-        $url = $this->href;
-        
-        foreach($this->getParams() as $key => $value) {
-            $url .= '&' . $key . '=' . $value;
+        return $this->href;
+    }
+    
+    /**
+     * Returns the treated url based in the user prefs
+     * 
+     * @param array $row
+     * @return string
+     */
+    public function getUrl(array $row = array())
+    {
+        // user data
+        $user_url = $this->getHref();
+        $user_defined_params = $this->getParams();
+        $user_keys = $this->getKeys();
+        $user_url_params = array();
+        // slice url
+        $user_url_pieces = parse_url($user_url);
+
+        // create host/path
+        $host = isset($user_url_pieces['host']) ? $user_url_pieces['host'] : '';
+        $path = isset($user_url_pieces['path']) ? $user_url_pieces['path'] : '';
+
+        // create array out of url params
+        if(isset($user_url_pieces['query'])) {
+            parse_str($user_url_pieces['query'], $user_url_params);
         }
+               
+        foreach($user_keys as $key => $value) {
+            if(!isset($row[$value])) {
+                continue 1;
+            }
+            
+            if(is_numeric($key)) {
+                $key = $value;
+            }
+            
+            $user_defined_params[$key] = $row[$value];
+        }
+
+        // all needed params
+        $all_params = array_merge($user_defined_params, $user_url_params);
         
-        return $url;
+        // set new url
+        $new_url = $host . $path . '?' . http_build_query($all_params);
+
+        return $new_url;
     }
 
     /**
@@ -150,6 +196,26 @@ class Action
     public function setParams(array $params = array())
     {
         $this->params = $params;
+        return $this;
+    }
+    
+    /**
+     * returns the url paramns
+     * @return array
+     */
+    public function getKeys()
+    {
+        return $this->keys;
+    }
+
+    /**
+     * sets the url keys
+     * @param type $keys
+     * @return Action 
+     */
+    public function setKeys(array $keys = array())
+    {
+        $this->keys = $keys;
         return $this;
     }
 

@@ -124,12 +124,7 @@ abstract class Grid
      * Load the basic configuration
      */
     public function __construct()
-    {       
-        $loader = new \Twig_Loader_Filesystem(__DIR__ . '/templates/default/');
-
-        // load twig
-        $this->twig = new \Twig_Environment($loader);
-
+    {
         // set session handle
         $this->sessionHandle = new \Mgrid\Session;
 
@@ -157,17 +152,22 @@ abstract class Grid
      */
     private function loadSettings()
     {
+        // general configs
+        $config = \Mgrid\Config::getConfig();
+        
+        // twig
+        $template_path = __DIR__ . '/templates/' . $config['template']['skin'] . '/';
+        $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($template_path));
+        
         // grid
         \Mgrid\Stdlib\Configurator::configure($this, \Mgrid\Config::getConfig('grid'));
         
-        // pager
-        $config = \Mgrid\Config::getConfig('pager');
-        
-        if(!isset($config['recordsPerPage'])) {
+        // pagination
+        if(!isset($config['pager']['recordsPerPage'])) {
             throw new \Mgrid\Exception('There is no settings for number of records per page');
         }
         
-        $this->pagerHandle->setMaxPerPage($config['recordsPerPage']);
+        $this->pagerHandle->setMaxPerPage($config['pager']['recordsPerPage']);
     }
 
     /**
@@ -307,6 +307,40 @@ abstract class Grid
 
         return $this;
     }
+    
+    /**
+     * 
+     * @param array $custom_params Params to be added into the url
+     * @return string
+     */
+    public function getAppUrl(array $custom_params = array())
+    {
+        // user data
+        $host_url = $_SERVER['REQUEST_URI'];
+        $host_url_params = array();
+        // slice url
+        $host_url_pieces = parse_url($host_url);
+
+        // create host/path
+        $host = isset($host_url_pieces['host']) ? $host_url_pieces['host'] : '';
+        $path = isset($host_url_pieces['path']) ? $host_url_pieces['path'] : '';
+
+        // create array out of url params
+        if(isset($host_url_pieces['query'])) {
+            parse_str($host_url_pieces['query'], $host_url_params);
+        }
+        
+        // clean previous mgrid params
+        unset($host_url_params['mgrid']);
+
+        // all needed params
+        $all_params = array_merge($custom_params, $host_url_params);
+        
+        // set new url
+        $new_url = $host . $path . '?' . http_build_query($all_params);
+        
+        return $new_url;       
+    }
 
     /**
      * Add a new column
@@ -404,11 +438,6 @@ abstract class Grid
             }
         }
         return $tmpActions;
-    }
-
-    public function getShowActions()
-    {
-        return (count($this->getActions()) && $this->showActions);
     }
 
     /**
