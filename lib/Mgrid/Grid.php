@@ -86,10 +86,10 @@ abstract class Grid
     protected $resultSet;
 
     /**
-     *
+     * Number of result sets found
      * @var int 
      */
-    protected $numRecords;
+    protected $numberFoundRecords;
 
     /**
      * @var Twig_Environment
@@ -143,9 +143,6 @@ abstract class Grid
 
         // set request
         $this->setRequest($_REQUEST);
-
-        // run init
-        $this->init();
     }
     
     /**
@@ -175,9 +172,11 @@ abstract class Grid
      * Returns the HTML output
      */
     public function render()
-    {
+    {   
+        // build the grid
         $this->build();
         
+        // render it
         return $this->twig->render('grid.twig', array(
                     'grid' => $this,
                     'pager' => $this->pagerHandle,
@@ -192,6 +191,9 @@ abstract class Grid
      */
     private function build()
     {
+        // load grid settings
+        $this->init();
+        
         // generate the grid
         $this->processSource()
                 ->processFilter()
@@ -219,11 +221,20 @@ abstract class Grid
     private function processFilter()
     {
         // set grid with filter or not
+        $hasFilter = false;
+        
         foreach ($this->getColumns() as $column) {
+            // case forced not to show
+            if($this->hasFilter() === false) {
+                break 1;
+            }
+            
             if ($column->hasFilter()) {
-                $this->setHasFilter(true);
+                $hasFilter = true;
             }
         }
+        
+        $this->setFilter($hasFilter);
 
         // sent parameters
         $params = $this->getRequest();
@@ -298,7 +309,7 @@ abstract class Grid
      * apply pager on RS
      */
     protected function processPager()
-    {
+    {   
         $resultSet = $this->pagerHandle->setResultSet($this->getResultSet())
                 ->setRequest($this->getRequest())
                 ->apply()
@@ -472,7 +483,7 @@ abstract class Grid
     {
 
         $this->resultSet = $resultSet;
-        $this->setNumRecords(count($resultSet));
+        $this->setNumberFoundRecords(count($resultSet));
 
         return $this;
     }
@@ -535,18 +546,27 @@ abstract class Grid
      * 
      * @param int $value
      */
-    public function setNumRecords($value)
+    public function setNumberFoundRecords($value)
     {
-        $this->numRecords = (int) $value;
+        $this->numberFoundRecords = (int) $value;
     }
 
     /**
      * 
      * @return int
      */
-    public function getNumRecords()
+    public function getNumberFoundRecords()
     {
-        return $this->numRecords;
+        return $this->numberFoundRecords;
+    }
+    
+    /**
+     * 
+     * @param int $value
+     */
+    public function setRecordsPerPage($value)
+    {
+        $this->pagerHandle->setMaxPerPage((int) $value);
     }
 
     /**
@@ -584,7 +604,7 @@ abstract class Grid
      * @param boolean $hasFilter
      * @return \Mgrid\Grid
      */
-    public function setHasFilter($hasFilter)
+    public function setFilter($hasFilter)
     {
         $this->hasFilter = (bool) $hasFilter;
 

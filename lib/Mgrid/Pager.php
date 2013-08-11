@@ -55,9 +55,9 @@ class Pager
      */
     protected $curPos = 1;
     /**
-     * @var integer $numRecords Number of results found
+     * @var integer $numberFoundRecords Number of results found
      */
-    protected $numRecords;
+    protected $numberFoundRecords;
 
     /**
      * @var integer $page Current page
@@ -80,7 +80,7 @@ class Pager
      */
     public function apply()
     {   
-        if ($this->getNumRecords() == 0) {
+        if ($this->getNumberFoundRecords() == 0) {
             return $this;
         }
 
@@ -181,7 +181,7 @@ class Pager
     protected function adjustOffset()
     {
         // Define new total of pages
-        $this->setLastPage(max(1, ceil($this->getNumRecords() / $this->getMaxPerPage())));
+        $this->setLastPage(max(1, ceil($this->getNumberFoundRecords() / $this->getMaxPerPage())));
         
         $offset = ($this->getCurPos() - 1) * $this->getMaxPerPage();
         $this->offset = $offset;
@@ -194,13 +194,13 @@ class Pager
      *
      * @return int the number of results found
      */
-    public function getNumRecords()
+    public function getNumberFoundRecords()
     {
-        if(!$this->numRecords) {
-            $this->numRecords = count($this->getResultSet());
+        if(!$this->numberFoundRecords) {
+            $this->numberFoundRecords = count($this->getResultSet());
         }
         
-        return $this->numRecords;
+        return $this->numberFoundRecords;
     }
     
     /**
@@ -244,7 +244,7 @@ class Pager
      */
     public function getTotalPages()
     {
-        return (int) ceil($this->getNumRecords() / $this->getMaxPerPage());
+        return (int) ceil($this->getNumberFoundRecords() / $this->getMaxPerPage());
     }
     
     /**
