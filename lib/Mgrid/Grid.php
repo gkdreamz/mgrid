@@ -567,6 +567,8 @@ abstract class Grid
     public function setRecordsPerPage($value)
     {
         $this->pagerHandle->setMaxPerPage((int) $value);
+        
+        return $this;
     }
 
     /**
