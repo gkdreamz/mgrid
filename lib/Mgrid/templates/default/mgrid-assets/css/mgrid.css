@@ -166,7 +166,7 @@ tr.mgrid-table-tr-rs-color td {
     display: block;
     width: 26px;
     height: 26px;
-    background: url('../assets/img/mgrid_icons.png') -308px -163px no-repeat;
+    background: url('../mgrid-assets/img/mgrid_icons.png') -308px -163px no-repeat;
 }
 
 .mgrid-table-div-opc-row ul.mgrid-table-div-opc-row-ul-list {
