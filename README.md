@@ -1,18 +1,13 @@
 # Mgrid - Grid solution for PHP 5
 
-Mgrid generates for you a optimal and handy grid. This version has great 
-improvements in regardless to renders, dependencies and refactoring the code.
-Please take a look at the [`changelog`][1]
-
-
-[ DO NOT USE THIS VERSION, THE NUMBER OF BUGS ARE UNBELIEVABLE]
-[ PLEASE DOWNLOAD THE v.0.0.2]
+Mgrid version 2.z generates an optimal grid for your application. This version has great 
+improvements in regardless to renders, dependencies, and features.
+Please take a look at the [`changelog`][1].
 
 Thanks, Renato Medina.
 
-
-
 ## Instalation
+
 
 ### The library
 
@@ -65,7 +60,6 @@ available.
 ## Docs
 
 See the `doc` directory for more detailed documentation or go to http://mgrid.mdnsolutions.com/documentation.
-
 
 
 ##About
