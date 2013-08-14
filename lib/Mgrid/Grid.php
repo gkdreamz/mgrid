@@ -120,6 +120,11 @@ abstract class Grid
      * @var $_REQUEST 
      */
     protected $request;
+    
+    /**
+     * grid config settings
+     */
+    protected $config;
 
     /**
      * Load the basic configuration
@@ -146,26 +151,26 @@ abstract class Grid
     }
     
     /**
-     * 
+     * Load default settings 
      */
     private function loadSettings()
     {
         // general configs
-        $config = \Mgrid\Config::getConfig();
+        $this->config = \Mgrid\Config::getConfig();
         
         // twig
-        $template_path = __DIR__ . '/templates/' . $config['template']['skin'] . '/';
+        $template_path = __DIR__ . '/templates/' . $this->config['template']['skin'] . '/';
         $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($template_path));
         
         // grid
         \Mgrid\Stdlib\Configurator::configure($this, \Mgrid\Config::getConfig('grid'));
         
         // pagination
-        if(!isset($config['pager']['recordsPerPage'])) {
+        if(!isset($this->config['pager']['recordsPerPage'])) {
             throw new \Mgrid\Exception('There is no settings for number of records per page');
         }
         
-        $this->pagerHandle->setMaxPerPage($config['pager']['recordsPerPage']);
+        $this->pagerHandle->setMaxPerPage($this->config['pager']['recordsPerPage']);
     }
 
     /**
@@ -180,6 +185,7 @@ abstract class Grid
         return $this->twig->render('grid.twig', array(
                     'grid' => $this,
                     'pager' => $this->pagerHandle,
+                    'config' => $this->config,
                         )
         );
     }
