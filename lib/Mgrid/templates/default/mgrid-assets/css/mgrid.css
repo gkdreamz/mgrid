@@ -105,9 +105,6 @@ tr.mgrid-table-tr-rs-color td {
     background-color: #EFEFEF;
 }
 .mgrid-table td {
-    border-left: 1px solid #EDFFF9;
-    border-right: 1px solid #EDFFF9;
-    border-bottom: 1px solid #EDFFF9;
     padding: 0 2px;
 }
 .mgrid-table-title {
