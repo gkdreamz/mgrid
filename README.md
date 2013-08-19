@@ -40,7 +40,8 @@ Into the package you can find the assets:
 Here you have 2 options:
 
     1. Just move the folder to the root of your application, making it accessible 
-by your url (e.g. http://www.yourdomain.com/mgrid-assets)
+       by your url (e.g. http://www.yourdomain.com/mgrid-assets)
+
     2. Just create a symlink.
 
 
@@ -63,12 +64,12 @@ The output is in HTML. Filters, sorting, pagination are also available.
 
 ## Docs
 
-See the `doc` directory for more detailed documentation or go to http://mgrid.mdnsolutions.com/documentation.
+Go to http://mgrid.mdnsolutions.com/documentation for more detailed documentation.
 
 
 ##About
 
-Available [`here`][5].
+Available on the component [`website`][5].
 
 ##Requirements
 
@@ -89,7 +90,7 @@ which participated in this project.
 
 ##License
 
-Mgrid is licensed under the MIT License - see the `LICENSE` file for details
+Mgrid is released under the LGPL license. - see the [`LICENSE`][6] page for details
 
 
 [1]: http://mgrid.mdnsolutions.com/install#download-manual
@@ -97,3 +98,4 @@ Mgrid is licensed under the MIT License - see the `LICENSE` file for details
 [3]: http://mgrid.mdnsolutions.com/changelog
 [4]: http://www.php-fig.org/psr/2/
 [5]: http://mgrid.mdnsolutions.com/about
+[6]: http://mgrid.mdnsolutions.com/license
